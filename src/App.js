@@ -1,24 +1,46 @@
 import logo from './logo.svg';
 import './App.css';
 
+import {Route, Switch} from "react-router-dom";
+
+import HomePage from "./pages/HomePage";
+import Network from "./pages/Network";
+import Jobs from "./pages/Jobs";
+import Messaging from "./pages/Messaging";
+import Notifications from "./pages/Notifications";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import MainNavigation from "./Components/layout/MainNavigation";
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div>
+          <MainNavigation />
+          <Switch>
+              <Route path='/' exact>
+                <HomePage />
+              </Route>
+              <Route path='/network' exact>
+                  <Network />
+              </Route>
+              <Route path='/jobs' exact>
+                  <Jobs />
+              </Route>
+              <Route path='/messaging' exact>
+                  <Messaging />
+              </Route>
+              <Route path='/notifications' exact>
+                  <Notifications />
+              </Route>
+              <Route path='/profile' exact>
+                  <Profile />
+              </Route>
+              <Route path='/settings' exact>
+                  <Settings />
+              </Route>
+          </Switch>
+
+      </div>
   );
 }
 
