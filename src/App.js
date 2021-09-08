@@ -11,6 +11,7 @@ import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import MainNavigation from "./Components/layout/MainNavigation";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
