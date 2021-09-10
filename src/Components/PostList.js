@@ -1,11 +1,16 @@
 import Post from "./Post";
+import {ListGroup} from "react-bootstrap";
+
 
 function PostList(props){
 
     return (
-        <ul>
-            {props.posts.map(post => <Post key={post.id} description={post.description}/>)}
-        </ul>
+        <ListGroup variant={"flush"}>
+            {props.posts.map(post => <Post
+                post={post.post}
+                userLikesThisPost={post.userLikesThisPost}
+            />)}
+        </ListGroup>
     )
 }
 

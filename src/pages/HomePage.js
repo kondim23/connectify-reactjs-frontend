@@ -2,6 +2,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import HomePageLeftSideBar from "../Components/HomePageLeftSideBar";
 import PostList from "../Components/PostList";
 import {useEffect, useState} from "react";
+import {LikeContextProvider} from "../store/liked-context";
 
 function HomePage(){
 
@@ -10,12 +11,10 @@ function HomePage(){
 
     useEffect(() => {
         setIsLoading(true);
-        console.log(1);
-        fetch("http://localhost:8080/allPosts",{
+        fetch("http://localhost:8080/posts?userEmail=kostas@mail.com",{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Access-Control-Allow-Origin' : 'http://localhost:3000'
+                'Accept': 'application/json'
             }
         }).then((response) => {
             return  response.json();
@@ -33,7 +32,7 @@ function HomePage(){
                     <Col xs={8}>
                         <section>
                             <ul>
-                                {isLoading ? <h1>dead</h1> : <PostList posts={loadedPosts}/> }
+                                {isLoading ? <h1>dead</h1> : <LikeContextProvider> <PostList posts={loadedPosts}/> </LikeContextProvider>}
                             </ul>
                         </section>
                     </Col>
