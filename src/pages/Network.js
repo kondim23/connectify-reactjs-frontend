@@ -1,9 +1,14 @@
-import {Button, Card, Container, FormControl, InputGroup, Row} from "react-bootstrap";
-import {useRef, useState} from "react";
+import {Button, Container, Form, FormControl, InputGroup, Row} from "react-bootstrap";
+import {useContext, useEffect, useRef, useState} from "react";
+import UserList from "../Components/UserList";
+import UserContext from "../store/user-context";
 
 function Network(){
 
+    const connectedUser = useContext(UserContext);
+
     const searchDataRef = useRef();
+    const [isLoading, setIsLoading] = useState(true);
     const [usersPreview, setUsersPreview] = useState([]);
 
     function searchSubmit(event){
@@ -19,113 +24,44 @@ function Network(){
 
             return response.json();
         }).then((users) => {
-
             setUsersPreview(users);
         })
     }
+
+    useEffect(() => {
+        setIsLoading(true);
+        fetch("http://localhost:8080/connections/users?userEmail="+connectedUser.email,{
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then((response) => {
+            return  response.json();
+        }).then((data) => {
+            setIsLoading(false);
+            setUsersPreview(data);
+        });
+    },[]);
 
     return (
 
         <Container>
             <Row>
-                <InputGroup className="mb-3" onSubmit={searchSubmit}>
-                    <FormControl
-                        placeholder="Enter a full name"
-                        aria-label="Search user"
-                        aria-describedby="basic-addon1"
-                        ref={searchDataRef}
-                    />
-                    <Button type={'submit'}>Search</Button>
-                </InputGroup>
+                <Form className="mb-3" onSubmit={searchSubmit}>
+                    <InputGroup>
+                        <FormControl
+                            placeholder="Enter a full name"
+                            aria-label="Search user"
+                            aria-describedby="basic-addon1"
+                            ref={searchDataRef}
+                        />
+                        <Button type={'submit`'}>Search</Button>
+                    </InputGroup>
+                </Form>
             </Row>
             <Row>
             <Container>
-                <div className={'row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3'}>
-                    <div className={'col'}>
-                        <div className={'card shadow-sm'}>
-                            <svg className="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div className="card-body">
-                                <p className="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="btn-group">
-                                        <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div>
-                                    <small className="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={'col'}>
-                        <div className={'card shadow-sm'}>
-                            <svg className="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div className="card-body">
-                                <p className="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="btn-group">
-                                        <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div>
-                                    <small className="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={'col'}>
-                        <div className={'card shadow-sm'}>
-                            <svg className="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div className="card-body">
-                                <p className="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="btn-group">
-                                        <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div>
-                                    <small className="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={'col'}>
-                        <div className={'card shadow-sm'}>
-                            <svg className="bd-placeholder-img card-img-top" width="100%" height="225"
-                                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                            </svg>
-                            <div className="card-body">
-                                <p className="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="btn-group">
-                                        <button type="button" className="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" className="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div>
-                                    <small className="text-muted">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {isLoading ? <h1>Loading...</h1> : <UserList users={usersPreview}/>}
             </Container>
             </Row>
         </Container>

@@ -59,8 +59,8 @@ export function LikeContextProvider(props){
 
     function isLikedHandler(postData){
 
-        return userLikedPosts.some(post => post.id === postData.post.id);
-        // return postData.userLikesThisPost;
+        // return userLikedPosts.some(post => post.id === postData.post.id);
+        return postData.userLikesThisPost;
     }
 
     const context = {

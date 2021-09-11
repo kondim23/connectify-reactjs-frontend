@@ -1,17 +1,36 @@
-import {Button, Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
+import {Accordion, Button, Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import LikeContext from "../store/liked-context";
+import CommentList from "./CommentList";
 
 function Post(props){
 
     const likedPostContext = useContext(LikeContext);
-
     const postIsLiked = likedPostContext.isLiked(props);
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [loadedComments, setLoadedComments] = useState([]);
+
+    function getCommentsHandler(){
+
+        setIsLoading(true);
+        fetch("http://localhost:8080/comments?postID="+props.post.id,{
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then((response) => {
+            return  response.json();
+        }).then((data) => {
+            setIsLoading(false);
+            setLoadedComments(data);
+        });
+    }
 
     function toggleLikePostHandler(){
 
-        if (postIsLiked) {
+        if (props.userLikesThisPost) {
             likedPostContext.unlikePost(props);
         }
         else{
@@ -33,10 +52,19 @@ function Post(props){
                                 {props.post.description}
                             </Card.Text>
                             <Card.Text>
-                                {props.userLikesThisPost ? 'liked' : 'not liked'}
+                                {likedPostContext.isLiked(props) ? 'liked' : 'not liked'}
                             </Card.Text>
-                            <Button variant="primary" onClick={toggleLikePostHandler}>{postIsLiked ? 'Unlike' : 'Like'}</Button>
-                            <ListGroup.Item as={Link} to={"/"}>View All Comments</ListGroup.Item>
+                            <Button variant="primary" onClick={toggleLikePostHandler}>{likedPostContext.isLiked(props) ? 'Unlike' : 'Like'}</Button>
+                            <ListGroupItem>
+                                <Accordion defaultActiveKey="0">
+                                    <Accordion.Item>
+                                        <Accordion.Header onClick={getCommentsHandler}>View Comments</Accordion.Header>
+                                        <Accordion.Body>
+                                            {isLoading ? false : <CommentList comments={loadedComments}/>}
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                </Accordion>
+                            </ListGroupItem>
                         </ListGroup>
                     </Card.Body>
                 </Card>

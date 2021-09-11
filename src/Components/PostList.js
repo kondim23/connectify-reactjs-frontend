@@ -7,9 +7,9 @@ function PostList(props){
     return (
         <ListGroup variant={"flush"}>
             {props.posts.map(post => <Post
-                post={post.post}
-                userLikesThisPost={post.userLikesThisPost}
-            />)}
+                        post={post.post}
+                        userLikesThisPost={post.userLikesThisPost}
+                    />)}
         </ListGroup>
     )
 }

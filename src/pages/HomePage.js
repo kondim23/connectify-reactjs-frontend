@@ -35,7 +35,11 @@ function HomePage(){
                     <Col xs={8}>
                         <section>
                             <ul>
-                                {isLoading ? <h1>dead</h1> : <LikeContextProvider> <PostList posts={loadedPosts}/> </LikeContextProvider>}
+                                {isLoading ? <h1>Loading...</h1> :
+                                    <LikeContextProvider>
+                                        <PostList posts={loadedPosts}/>
+                                    </LikeContextProvider>
+                                }
                             </ul>
                         </section>
                     </Col>
