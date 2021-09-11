@@ -1,4 +1,5 @@
-import {createContext, useState} from "react";
+import {createContext, useContext, useState} from "react";
+import UserContext from "./user-context";
 
 const LikeContext = createContext({
         likedPosts:[],
@@ -9,6 +10,8 @@ const LikeContext = createContext({
 );
 
 export function LikeContextProvider(props){
+
+    const connectedUser = useContext(UserContext);
 
     const [userLikedPosts, setUserLikedPosts] = useState([]);
 
@@ -31,7 +34,7 @@ export function LikeContextProvider(props){
             method:'POST',
             body: JSON.stringify({
                 date : new Date().getUTCDate(),
-                userLikes : postData.post.postCreator,
+                userLikes : connectedUser,
                 postLiked : postData.post
             })
         });
@@ -42,7 +45,7 @@ export function LikeContextProvider(props){
 
     function unlikePostHandler(postData){
 
-        fetch('http://localhost:8080/likes?userEmail=kostas@mail.com&postId='+postData.post.id,{
+        fetch('http://localhost:8080/likes?userEmail='+connectedUser.email+'&postId='+postData.post.id,{
             headers : {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'

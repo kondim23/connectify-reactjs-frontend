@@ -1,17 +1,20 @@
 import {Col, Container, Row} from "react-bootstrap";
 import HomePageLeftSideBar from "../Components/HomePageLeftSideBar";
 import PostList from "../Components/PostList";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {LikeContextProvider} from "../store/liked-context";
+import UserContext from "../store/user-context";
 
 function HomePage(){
+
+    const connectedUser = useContext(UserContext);
 
     const [isLoading, setIsLoading] = useState(true);
     const [loadedPosts, setLoadedPosts] = useState([]);
 
     useEffect(() => {
         setIsLoading(true);
-        fetch("http://localhost:8080/posts?userEmail=kostas@mail.com",{
+        fetch("http://localhost:8080/posts?userEmail="+connectedUser.email,{
             headers : {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'

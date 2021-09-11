@@ -1,0 +1,99 @@
+import {Col, Container, Row} from "react-bootstrap";
+import LogIn from "../Components/LogIn";
+import SignUp from "../Components/SignUp";
+import {useContext} from "react";
+import {Redirect} from "react-router-dom";
+import UserContext from "../store/user-context";
+
+function SignUpLogIn() {
+
+    const connectedUserContext = useContext(UserContext);
+
+    function logInHandler(givenEmail, givenPassword){
+
+        fetch("http://localhost:8080/signin?userEmail="+givenEmail+"&userPass="+givenPassword,{
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then((response) => {return response.text();
+        }).then((userInfo) =>
+        {
+            if (userInfo==='Admin') {
+                connectedUserContext.setUserInfo({
+                    isLoggedIn: true,
+                    isAdmin: true,
+                    email: givenEmail,
+                    password: givenPassword,
+                    name: null,
+                    surname: null
+                });
+                return <Redirect to={'/'}/>;
+            }
+            else if (userInfo==='User'){
+
+                fetch("http://localhost:8080/user?userEmail="+givenEmail,{
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }).then((response) => {return response.json();
+                }).then((userInfo) => {
+                    connectedUserContext.setUserInfo({
+                        isLoggedIn: true,
+                        isAdmin: false,
+                        email: givenEmail,
+                        password: givenPassword,
+                        name: userInfo.name,
+                        surname: userInfo.surname
+                    });
+                    return <Redirect to={'/'}/>;
+                });
+            }
+        });
+    }
+
+    function signUpHandler(signUpData){
+
+        if (signUpData.password!==signUpData.confirmationPass) return <Redirect to ='/'/>;
+
+        fetch("http://localhost:8080/users",{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body:JSON.stringify(signUpData)
+        }).then((response) => {
+
+            if (response.ok) {
+                connectedUserContext.setUserInfo({
+                    isLoggedIn: true,
+                    isAdmin: false,
+                    email: signUpData.email,
+                    password: signUpData.password,
+                    name: signUpData.name,
+                    surname: signUpData.surname
+                })
+            }
+
+            return <Redirect to={'/'}/>;
+        })
+    }
+
+    return (
+        <Container fluid>
+            <h1>Welcome to Linked In!</h1>
+            <Row>
+                <Col>
+                    <LogIn onLogin={logInHandler}/>
+                </Col>
+                <Col>
+                    <SignUp onSignup={signUpHandler}/>
+                </Col>
+            </Row>
+        </Container>
+    )
+}
+
+export default SignUpLogIn;

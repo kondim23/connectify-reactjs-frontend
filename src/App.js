@@ -11,8 +11,21 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import MainNavigation from "./Components/layout/MainNavigation";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {useContext} from "react";
+import SignUpLogIn from "./pages/SignUp-LogIn";
+import UserContext from "./store/user-context";
 
 function App() {
+
+    const connectedUserInfo = useContext(UserContext);
+
+    if (!connectedUserInfo.isLoggedIn) return (
+        <div>
+            <SignUpLogIn/>
+        </div>
+    )
+
+
   return (
       <div>
           <MainNavigation />
