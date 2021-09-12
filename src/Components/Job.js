@@ -1,4 +1,4 @@
-import {Button, Card, Container, ListGroupItem} from "react-bootstrap";
+import {Button, Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
 import {useContext} from "react";
 import UserContext from "../store/user-context";
 
@@ -27,9 +27,20 @@ function Job(props){
             <Container>
                 <Card>
                     <Card.Body>
-                        <Card.Text>{props.job.description}</Card.Text>
-                        <Card.Footer>{props.job.creatorJob.name + " " + props.job.creatorJob.surname}</Card.Footer>
-                        <Button variant="outline-secondary" id="button-addon2" onClick={submitRequestHandler}>Apply</Button>
+                        <ListGroup variant={"flush"}>
+                            <ListGroupItem>
+                                <Card.Title>{props.job.title}</Card.Title>
+                            </ListGroupItem>
+                            <ListGroupItem>
+                                <Card.Text>{props.job.description}</Card.Text>
+                            </ListGroupItem>
+                            <ListGroupItem>
+                                <div className={"text-muted"}>by {props.job.creatorJob.name + " " + props.job.creatorJob.surname}</div>
+                            </ListGroupItem>
+                            <ListGroupItem>
+                                <Button variant="outline-secondary" id="button-addon2" onClick={submitRequestHandler}>Apply</Button>
+                            </ListGroupItem>
+                        </ListGroup>
                     </Card.Body>
                 </Card>
             </Container>

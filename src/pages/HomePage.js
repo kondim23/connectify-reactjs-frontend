@@ -26,8 +26,9 @@ function HomePage(){
         }).then((data) => {
             setIsLoading(false);
             setLoadedPosts(data);
+            likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));
         });
-    },[likeContext.isLoading]);
+    },[]);
 
     return (
         <Container >

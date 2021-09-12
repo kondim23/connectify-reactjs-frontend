@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {useContext, useState} from "react";
 import LikeContext from "../store/liked-context";
 import CommentList from "./CommentList";
+import NewComment from "./NewComment";
 
 function Post(props){
 
@@ -30,7 +31,7 @@ function Post(props){
 
     function toggleLikePostHandler(){
 
-        if (props.userLikesThisPost) {
+        if (postIsLiked) {
             likedPostContext.unlikePost(props);
         }
         else{
@@ -41,32 +42,37 @@ function Post(props){
     return (
         <ListGroupItem>
                 <Card>
-                    <Card.Header>
-                        {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
-                    </Card.Header>
-                    {props.post.image? <Card.Img variant="top" src={props.post.image} /> : null}
                     <Card.Body>
                         <ListGroup variant="flush">
+                            <ListGroupItem>
+                                <Card.Title>
+                                    {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
+                                </Card.Title>
+                            </ListGroupItem>
+                            {props.post.image ? <ListGroupItem> <Card.Img variant="top" src={props.post.image}/> </ListGroupItem> : null }
                             <ListGroupItem>
                                 <Card.Text>
                                     {props.post.description}
                                 </Card.Text>
                             </ListGroupItem>
                             <ListGroupItem>
-                            <Button
-                                variant="outline-secondary"
-                                id="button-addon2"
-                                onClick={toggleLikePostHandler}
-                                style={{width:'7rem'}}>
-                                {likedPostContext.isLiked(props) ? 'Unlike' : 'Like'}
-                            </Button>
+                                <Button
+                                    variant="outline-secondary"
+                                    id="button-addon2"
+                                    onClick={toggleLikePostHandler}
+                                    style={{width:'7rem'}}>
+                                    {postIsLiked ? 'Unlike' : 'Like'}
+                                </Button>
                             </ListGroupItem>
                             <ListGroupItem>
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Item>
                                         <Accordion.Header onClick={getCommentsHandler}>View Comments</Accordion.Header>
                                         <Accordion.Body>
-                                            {isLoading ? false : <CommentList comments={loadedComments}/>}
+                                            <Container>
+                                                {isLoading ? false : <CommentList comments={loadedComments}/>}
+                                                <NewComment post={props.post}/>
+                                            </Container>
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 </Accordion>

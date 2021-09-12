@@ -3,10 +3,10 @@ import UserContext from "./user-context";
 
 const LikeContext = createContext({
         likedPosts:[],
+        initializeLikedPosts: (likedPosts) => {},
         likePost: (postData) => {},
         unlikePost: (postData) => {},
-        isLiked: (postData) => {},
-        isLoading: false
+        isLiked: (postData) => {}
     }
 );
 
@@ -15,20 +15,13 @@ export function LikeContextProvider(props){
     const connectedUser = useContext(UserContext);
 
     const [userLikedPosts, setUserLikedPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
 
-    // for (const post in props){
-    //     if (post.userLikesThisPost){
-    //         setUserLikedPosts(() => {
-    //             return userLikedPosts.concat(post.post);
-    //         });
-    //     }
-    // }
-
+    function initializeLikedPostsHandler(likedPosts){
+        setUserLikedPosts(likedPosts);
+    }
 
     function likePostHandler(postData){
 
-        setIsLoading(true);
         fetch('http://localhost:8080/likes',{
             headers : {
                 'Content-Type': 'application/json',
@@ -40,7 +33,7 @@ export function LikeContextProvider(props){
                 userLikes : connectedUser,
                 postLiked : postData.post
             })
-        }).then(() => setIsLoading(false));
+        });
         setUserLikedPosts(() => {
             return userLikedPosts.concat(postData.post);
         });
@@ -48,14 +41,13 @@ export function LikeContextProvider(props){
 
     function unlikePostHandler(postData){
 
-        setIsLoading(true);
         fetch('http://localhost:8080/likes?userEmail='+connectedUser.email+'&postId='+postData.post.id,{
             headers : {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
             method:'DELETE'
-        }).then(() => setIsLoading(false));
+        });
         setUserLikedPosts(prevLikedPosts => {
             return prevLikedPosts.filter(post => post.id !== postData.post.id);
         });
@@ -63,16 +55,15 @@ export function LikeContextProvider(props){
 
     function isLikedHandler(postData){
 
-        // return userLikedPosts.some(post => post.id === postData.post.id);
-        return postData.userLikesThisPost;
+        return userLikedPosts.some(post => post.id === postData.post.id);
     }
 
     const context = {
         likedPosts: userLikedPosts,
+        initializeLikedPosts: initializeLikedPostsHandler,
         likePost: likePostHandler,
         unlikePost: unlikePostHandler,
-        isLiked: isLikedHandler,
-        isLoading: isLoading
+        isLiked: isLikedHandler
     };
 
     return <LikeContext.Provider value={context}>

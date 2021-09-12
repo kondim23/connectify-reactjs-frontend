@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import UserContext from "../store/user-context";
 import JobRequestList from "../Components/JobRequestList";
 import JobList from "../Components/JobList";
+import NewJob from "../Components/NewJob";
 
 function Jobs(){
 
@@ -57,6 +58,7 @@ function Jobs(){
                     </Accordion.Item>
                 </Accordion>
             </div>
+            <NewJob/>
             {isLoadingJobs ? false : <JobList jobs={loadedJobs}/>}
         </Container>
     )
