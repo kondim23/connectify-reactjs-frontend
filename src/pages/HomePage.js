@@ -2,12 +2,14 @@ import {Col, Container, Row} from "react-bootstrap";
 import HomePageLeftSideBar from "../Components/HomePageLeftSideBar";
 import PostList from "../Components/PostList";
 import {useContext, useEffect, useState} from "react";
-import {LikeContextProvider} from "../store/liked-context";
+import LikeContext from "../store/liked-context";
 import UserContext from "../store/user-context";
+import NewPost from "../Components/NewPost";
 
 function HomePage(){
 
     const connectedUser = useContext(UserContext);
+    const likeContext = useContext(LikeContext);
 
     const [isLoading, setIsLoading] = useState(true);
     const [loadedPosts, setLoadedPosts] = useState([]);
@@ -25,26 +27,25 @@ function HomePage(){
             setIsLoading(false);
             setLoadedPosts(data);
         });
-    },[]);
+    },[likeContext.isLoading]);
 
-    return (<Container>
-                <Row>
-                    <Col xs={4}>
-                        <HomePageLeftSideBar/>
-                    </Col>
-                    <Col xs={8}>
+    return (
+        <Container >
+            <Row >
+                <Col xs={4}>
+                    <HomePageLeftSideBar/>
+                </Col>
+                <Col xs={8}>
+                    <Container>
+                        <NewPost/>
                         <section>
-                            <ul>
-                                {isLoading ? <h1>Loading...</h1> :
-                                    <LikeContextProvider>
-                                        <PostList posts={loadedPosts}/>
-                                    </LikeContextProvider>
-                                }
-                            </ul>
+                                {isLoading ? false : <PostList posts={loadedPosts}/>}
                         </section>
-                    </Col>
-                </Row>
-            </Container>)
+                    </Container>
+                </Col>
+            </Row>
+        </Container>
+    )
 }
 
 export default HomePage;

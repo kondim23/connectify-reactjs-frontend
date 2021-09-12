@@ -1,6 +1,12 @@
+import {Container} from "react-bootstrap";
+
 function Notifications(){
 
-    return <div>Notifications</div>
+    return (
+        <Container>
+
+        </Container>
+    )
 }
 
 export default Notifications;

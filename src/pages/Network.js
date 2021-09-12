@@ -51,17 +51,17 @@ function Network(){
                     <InputGroup>
                         <FormControl
                             placeholder="Enter a full name"
-                            aria-label="Search user"
+                            aria-label="Enter a full name"
                             aria-describedby="basic-addon1"
                             ref={searchDataRef}
                         />
-                        <Button type={'submit`'}>Search</Button>
+                        <Button variant="outline-secondary" id="button-addon2" type={'submit`'}>Search</Button>
                     </InputGroup>
                 </Form>
             </Row>
             <Row>
             <Container>
-                {isLoading ? <h1>Loading...</h1> : <UserList users={usersPreview}/>}
+                {isLoading ? false : <UserList users={usersPreview}/>}
             </Container>
             </Row>
         </Container>

@@ -40,21 +40,27 @@ function Post(props){
 
     return (
         <ListGroupItem>
-            <Container >
-                <Card style={{width:'40rem'}}>
+                <Card>
                     <Card.Header>
                         {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
                     </Card.Header>
                     {props.post.image? <Card.Img variant="top" src={props.post.image} /> : null}
                     <Card.Body>
                         <ListGroup variant="flush">
-                            <Card.Text>
-                                {props.post.description}
-                            </Card.Text>
-                            <Card.Text>
-                                {likedPostContext.isLiked(props) ? 'liked' : 'not liked'}
-                            </Card.Text>
-                            <Button variant="primary" onClick={toggleLikePostHandler}>{likedPostContext.isLiked(props) ? 'Unlike' : 'Like'}</Button>
+                            <ListGroupItem>
+                                <Card.Text>
+                                    {props.post.description}
+                                </Card.Text>
+                            </ListGroupItem>
+                            <ListGroupItem>
+                            <Button
+                                variant="outline-secondary"
+                                id="button-addon2"
+                                onClick={toggleLikePostHandler}
+                                style={{width:'7rem'}}>
+                                {likedPostContext.isLiked(props) ? 'Unlike' : 'Like'}
+                            </Button>
+                            </ListGroupItem>
                             <ListGroupItem>
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Item>
@@ -68,7 +74,6 @@ function Post(props){
                         </ListGroup>
                     </Card.Body>
                 </Card>
-            </Container>
         </ListGroupItem>
     )
 }

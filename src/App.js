@@ -14,6 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {useContext} from "react";
 import SignUpLogIn from "./pages/SignUp-LogIn";
 import UserContext from "./store/user-context";
+import {LikeContextProvider} from "./store/liked-context";
 
 function App() {
 
@@ -28,10 +29,14 @@ function App() {
 
   return (
       <div>
-          <MainNavigation />
+          <div style={{marginBottom: '25px'}}>
+            <MainNavigation />
+          </div>
           <Switch>
               <Route path='/' exact>
-                <HomePage />
+                  <LikeContextProvider>
+                    <HomePage />
+                  </LikeContextProvider>
               </Route>
               <Route path='/network' exact>
                   <Network />
