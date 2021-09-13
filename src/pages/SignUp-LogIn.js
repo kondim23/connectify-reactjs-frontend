@@ -1,4 +1,4 @@
-import {Col, Container, Row} from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 import LogIn from "../Components/LogIn";
 import SignUp from "../Components/SignUp";
 import {useContext} from "react";
@@ -83,15 +83,19 @@ function SignUpLogIn() {
 
     return (
         <Container fluid>
-            <h1>Welcome to Linked In!</h1>
-            <Row>
-                <Col>
-                    <LogIn onLogin={logInHandler}/>
-                </Col>
-                <Col>
-                    <SignUp onSignup={signUpHandler}/>
-                </Col>
-            </Row>
+            <Card style={{marginTop:'30px'}}>
+                <Card.Header><Card.Title>Welcome to Linked In!</Card.Title></Card.Header>
+                <Card.Body>
+                    <Row>
+                        <Col>
+                            <LogIn onLogin={logInHandler}/>
+                        </Col>
+                        <Col>
+                            <SignUp onSignup={signUpHandler}/>
+                        </Col>
+                    </Row>
+                </Card.Body>
+            </Card>
         </Container>
     )
 }

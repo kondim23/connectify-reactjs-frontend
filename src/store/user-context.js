@@ -8,6 +8,7 @@ const UserContext = createContext({
     password:null,
     name:null,
     surname:null,
+    phone:null,
     setUserInfo:(userData) => {}
 })
 
@@ -19,7 +20,8 @@ export function UserContextProvider(props){
         email:null,
         password:null,
         name:null,
-        surname:null
+        surname:null,
+        phone:null
     });
 
     const context={
@@ -29,6 +31,7 @@ export function UserContextProvider(props){
         password:userInfo.password,
         name:userInfo.name,
         surname:userInfo.surname,
+        phone:userInfo.phone,
         setUserInfo:setUserInfo
     }
 

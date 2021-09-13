@@ -42,10 +42,10 @@ function ConnectRequest(props){
                     </text>
                 </Col>
                 <Col xs={1}>
-                    <Button style={{width:'5rem'}} variant="outline-primary" id="button-addon2" onClick={acceptConnectionRequest}>Connect</Button>
+                    <Button style={{width:'6rem'}} variant="outline-primary" id="button-addon2" onClick={acceptConnectionRequest}>Connect</Button>
                 </Col>
                 <Col xs={1}>
-                    <Button style={{width:'5rem'}} variant="outline-danger" id="button-addon2" onClick={rejectConnectionRequest}>Reject</Button>
+                    <Button style={{width:'6rem'}} variant="outline-danger" id="button-addon2" onClick={rejectConnectionRequest}>Reject</Button>
                 </Col>
             </Row>
         </ListGroupItem>

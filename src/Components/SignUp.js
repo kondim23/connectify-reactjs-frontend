@@ -1,4 +1,4 @@
-import {Button, Container, Form} from "react-bootstrap";
+import {Button, Card, Container, Form} from "react-bootstrap";
 import {useRef} from "react";
 
 function SignUp(props) {
@@ -33,33 +33,37 @@ function SignUp(props) {
 
     return (
         <Container>
-                <Form onSubmit={submitSignUp}>
-                    <h1>Sign Up</h1>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" ref={emailRef}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" ref={passwordRef}/>
-                        <Form.Text className="text-muted">
-                            We'll never share your email with anyone else.
-                        </Form.Text>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" ref={passwordConfirmationRef}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter email" ref={nameRef}/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Surname</Form.Label>
-                        <Form.Control type="text" placeholder="Enter email" ref={surnameRef}/>
-                    </Form.Group>
-                    <Button type={'submit'}>Submit</Button>
-                </Form>
+            <Card>
+                <Card.Header><Card.Title>Sign Up</Card.Title></Card.Header>
+                <Card.Body>
+                    <Form onSubmit={submitSignUp}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email" ref={emailRef}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" placeholder="Password" ref={passwordRef}/>
+                            <Form.Text className="text-muted">
+                                We'll never share your email with anyone else.
+                            </Form.Text>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                            <Form.Label>Confirm Password</Form.Label>
+                            <Form.Control type="password" placeholder="Password" ref={passwordConfirmationRef}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control type="text" placeholder="Enter email" ref={nameRef}/>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Surname</Form.Label>
+                            <Form.Control type="text" placeholder="Enter email" ref={surnameRef}/>
+                        </Form.Group>
+                        <Button type={'submit'} variant="outline-secondary" id="button-addon2">Submit</Button>
+                    </Form>
+                </Card.Body>
+            </Card>
         </Container>
     )
 }

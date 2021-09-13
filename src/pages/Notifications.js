@@ -1,4 +1,4 @@
-import {Container, Row} from "react-bootstrap";
+import {Card, Container, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import UserContext from "../store/user-context";
 import ConnectRequestList from "../Components/ConnectRequestList";
@@ -43,11 +43,17 @@ function Notifications(){
 
     return (
         <Container>
-            <Row style={{overflowY:'scroll',height:'100'}}>
-                {isLoadingConnectRequest ? false : <ConnectRequestList connectRequests={connectRequests}/>}
+            <Row style={{overflowY:'scroll',marginBottom: '25px'}}>
+                <Card style={{height:'25rem'}}>
+                    <Card.Header>Your connection requests:</Card.Header>
+                    {isLoadingConnectRequest ? false : <ConnectRequestList connectRequests={connectRequests}/>}
+                </Card>
             </Row>
             <Row style={{overflowY:'scroll'}}>
-                {isLoadingLikeComments ? false : <LikeCommentList notifications={likeComment}/>}
+                <Card style={{height:'25rem'}}>
+                    <Card.Header>Your latest notifications::</Card.Header>
+                    {isLoadingLikeComments ? false : <LikeCommentList notifications={likeComment}/>}
+                </Card>
             </Row>
         </Container>
     )
