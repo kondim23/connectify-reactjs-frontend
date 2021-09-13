@@ -13,8 +13,7 @@ function User(props){
                 </svg>
                 <div className="card-body">
                     <ListGroup>
-                        <ListGroupItem>{props.userData.name}</ListGroupItem>
-                        <ListGroupItem>{props.userData.surname}</ListGroupItem>
+                        <ListGroupItem>{props.userData.name+" "+props.userData.surname}</ListGroupItem>
                         <ListGroupItem>{props.userData.email}</ListGroupItem>
                         {props.userData.privacy_edu ? false : <ListGroupItem>{props.userData.education}</ListGroupItem>}
                         {props.userData.privacy_sk ? false : <ListGroupItem>{props.userData.skills}</ListGroupItem>}

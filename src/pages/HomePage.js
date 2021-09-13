@@ -33,10 +33,10 @@ function HomePage(){
     return (
         <Container >
             <Row >
-                <Col xs={4}>
+                <Col lg={3}>
                     <HomePageLeftSideBar/>
                 </Col>
-                <Col xs={8}>
+                <Col lg={9}>
                     <Container>
                         <NewPost/>
                         <section>
