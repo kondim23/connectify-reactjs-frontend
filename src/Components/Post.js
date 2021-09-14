@@ -4,10 +4,12 @@ import {useContext, useState} from "react";
 import LikeContext from "../store/liked-context";
 import CommentList from "./CommentList";
 import NewComment from "./NewComment";
+import UserToVisitContext from "../store/userToVisit-context";
 
 function Post(props){
 
     const likedPostContext = useContext(LikeContext);
+    const userToVisit = useContext(UserToVisitContext);
     const postIsLiked = likedPostContext.isLiked(props);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -39,12 +41,14 @@ function Post(props){
         }
     }
 
+    function setUserToVisit(){userToVisit.setUserToVisitInfo(props.post.postCreator)}
+
     return (
         <ListGroupItem>
                 <Card>
                     <Card.Body>
                         <ListGroup variant="flush">
-                            <ListGroupItem>
+                            <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
                                 <Card.Title>
                                     {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
                                 </Card.Title>
@@ -54,17 +58,13 @@ function Post(props){
                                 <Card.Text>
                                     {props.post.description}
                                 </Card.Text>
-                            </ListGroupItem>
-                            <ListGroupItem>
                                 <Button
                                     variant="outline-secondary"
                                     id="button-addon2"
                                     onClick={toggleLikePostHandler}
-                                    style={{width:'7rem'}}>
+                                    style={{width:'7rem',marginBottom:'1rem'}}>
                                     {postIsLiked ? 'Unlike' : 'Like'}
                                 </Button>
-                            </ListGroupItem>
-                            <ListGroupItem>
                                 <Accordion defaultActiveKey="0">
                                     <Accordion.Item>
                                         <Accordion.Header onClick={getCommentsHandler}>View Comments</Accordion.Header>

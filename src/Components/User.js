@@ -1,6 +1,15 @@
 import {ListGroup, ListGroupItem} from "react-bootstrap";
+import {Link} from "react-router-dom";
+import {useContext} from "react";
+import UserToVisitContext from "../store/userToVisit-context";
 
 function User(props){
+
+    const userToVisit = useContext(UserToVisitContext);
+
+    function setUserToVisit(){
+        userToVisit.setUserToVisitInfo(props.userData);
+    }
 
     return (
         <div className={'col'}>
@@ -13,11 +22,11 @@ function User(props){
                 </svg>
                 <div className="card-body">
                     <ListGroup>
-                        <ListGroupItem>{props.userData.name+" "+props.userData.surname}</ListGroupItem>
+                        <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>{props.userData.name+" "+props.userData.surname}</ListGroupItem>
                         <ListGroupItem>{props.userData.email}</ListGroupItem>
-                        {props.userData.privacy_edu ? false : <ListGroupItem>{props.userData.education}</ListGroupItem>}
-                        {props.userData.privacy_sk ? false : <ListGroupItem>{props.userData.skills}</ListGroupItem>}
-                        {props.userData.privacy_exp ? false : <ListGroupItem>{props.userData.experience}</ListGroupItem>}
+                        {props.userData.privacyEdu ? false : <ListGroupItem>{props.userData.education}</ListGroupItem>}
+                        {props.userData.privacySk ? false : <ListGroupItem>{props.userData.skills}</ListGroupItem>}
+                        {props.userData.privacyExp ? false : <ListGroupItem>{props.userData.experience}</ListGroupItem>}
                     </ListGroup>
                 </div>
             </div>

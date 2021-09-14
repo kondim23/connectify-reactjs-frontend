@@ -15,8 +15,9 @@ import {useContext} from "react";
 import SignUpLogIn from "./pages/SignUp-LogIn";
 import UserContext from "./store/user-context";
 import {LikeContextProvider} from "./store/liked-context";
+import UserProfile from "./pages/UserProfile";
 
-function App() {
+function App(props) {
 
     const connectedUserInfo = useContext(UserContext);
 
@@ -55,6 +56,10 @@ function App() {
               </Route>
               <Route path='/settings' exact>
                   <Settings />
+              </Route>
+              <Route path='/user' exact>
+                  {console.log(props.user)}
+                  <UserProfile user={props.user}/>
               </Route>
           </Switch>
 

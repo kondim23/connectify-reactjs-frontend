@@ -5,11 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {UserContextProvider} from "./store/user-context";
+import {UserToVisitContextProvider} from "./store/userToVisit-context";
 
 ReactDOM.render(
         <BrowserRouter>
             <UserContextProvider>
-                <App />
+                <UserToVisitContextProvider>
+                    <App />
+                </UserToVisitContextProvider>
             </UserContextProvider>
         </BrowserRouter>,
   document.getElementById('root')

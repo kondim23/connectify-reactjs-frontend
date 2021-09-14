@@ -1,10 +1,15 @@
 import {Col, ListGroupItem, Row, Button} from "react-bootstrap";
 import {useContext} from "react";
 import UserContext from "../store/user-context";
+import UserToVisitContext from "../store/userToVisit-context";
+import {Link} from "react-router-dom";
 
 function ConnectRequest(props){
 
     const connectedUser = useContext(UserContext);
+    const userToVisit = useContext(UserToVisitContext);
+
+    function setUserToVisit(){userToVisit.setUserToVisitInfo(props.connectionRequest.connectSender)}
 
     function acceptConnectionRequest(){
 

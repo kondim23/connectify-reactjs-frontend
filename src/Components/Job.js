@@ -1,10 +1,15 @@
 import {Button, Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
 import {useContext} from "react";
 import UserContext from "../store/user-context";
+import {Link} from "react-router-dom";
+import UserToVisitContext from "../store/userToVisit-context";
 
 function Job(props){
 
     const connectedUser = useContext(UserContext);
+    const userToVisit = useContext(UserToVisitContext);
+
+    function setUserToVisit(){userToVisit.setUserToVisitInfo(props.job.creatorJob)}
 
     function submitRequestHandler(){
 
@@ -34,7 +39,7 @@ function Job(props){
                             <ListGroupItem>
                                 <Card.Text>{props.job.description}</Card.Text>
                             </ListGroupItem>
-                            <ListGroupItem>
+                            <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
                                 <div className={"text-muted"}>by {props.job.creatorJob.name + " " + props.job.creatorJob.surname}</div>
                             </ListGroupItem>
                             <ListGroupItem>
