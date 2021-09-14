@@ -26,7 +26,14 @@ function SignUpLogIn() {
                     email: givenEmail,
                     password: givenPassword,
                     name: null,
-                    surname: null
+                    surname: null,
+                    phone: null,
+                    education: null,
+                    skill: null,
+                    experience: null,
+                    privacyExp: true,
+                    privacyEdu: true,
+                    privacySk: true,
                 });
                 return <Redirect to={'/'}/>;
             }
@@ -45,7 +52,14 @@ function SignUpLogIn() {
                         email: givenEmail,
                         password: givenPassword,
                         name: userInfo.name,
-                        surname: userInfo.surname
+                        surname: userInfo.surname,
+                        phone: userInfo.phone,
+                        education: userInfo.education,
+                        skill: userInfo.skill,
+                        experience: userInfo.experience,
+                        privacyExp: userInfo.privacyExp,
+                        privacyEdu: userInfo.privacyEdu,
+                        privacySk: userInfo.privacySk
                     });
                     return <Redirect to={'/'}/>;
                 });
@@ -73,7 +87,14 @@ function SignUpLogIn() {
                     email: signUpData.email,
                     password: signUpData.password,
                     name: signUpData.name,
-                    surname: signUpData.surname
+                    surname: signUpData.surname,
+                    phone: null,
+                    education: null,
+                    skill: null,
+                    experience: null,
+                    privacyExp: true,
+                    privacyEdu: true,
+                    privacySk: true
                 })
             }
 

@@ -13,25 +13,7 @@ function Settings(){
 
         event.preventDefault();
 
-        fetch("http://localhost:8080/user/"+connectedUser.email,{
-            method:'PUT',
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                isAdmin: connectedUser.isAdmin,
-                isLoggedIn: connectedUser.isLoggedIn,
-                email: emailRef.current.value ? emailRef.current.value : connectedUser.email,
-                password: passwordRef.current.value ? passwordRef.current.value : connectedUser.password,
-                name: connectedUser.name,
-                surname: connectedUser.surname,
-                phone: connectedUser.phone,
-                experience: connectedUser.experience,
-                skill: connectedUser.skill,
-                education: connectedUser.education,
-            })
-        }).then(() => connectedUser.setUserInfo({
+        const userInfo = {
             isAdmin: connectedUser.isAdmin,
             isLoggedIn: connectedUser.isLoggedIn,
             email: emailRef.current.value ? emailRef.current.value : connectedUser.email,
@@ -42,8 +24,16 @@ function Settings(){
             experience: connectedUser.experience,
             skill: connectedUser.skill,
             education: connectedUser.education,
-        }))
+        }
 
+        fetch("http://localhost:8080/user/"+connectedUser.email,{
+            method:'PUT',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(userInfo)
+        }).then(() => connectedUser.setUserInfo(userInfo))
 
     }
 

@@ -9,6 +9,12 @@ const UserContext = createContext({
     name:null,
     surname:null,
     phone:null,
+    education:null,
+    skill:null,
+    experience:null,
+    privacyExp: true,
+    privacyEdu: true,
+    privacySk: true,
     setUserInfo:(userData) => {}
 })
 
@@ -21,7 +27,13 @@ export function UserContextProvider(props){
         password:null,
         name:null,
         surname:null,
-        phone:null
+        phone:null,
+        education:null,
+        skill:null,
+        experience:null,
+        privacyExp: true,
+        privacyEdu: true,
+        privacySk: true
     });
 
     const context={
@@ -32,6 +44,12 @@ export function UserContextProvider(props){
         name:userInfo.name,
         surname:userInfo.surname,
         phone:userInfo.phone,
+        education:userInfo.education,
+        skill:userInfo.skill,
+        experience:userInfo.experience,
+        privacyExp: userInfo.privacyExp,
+        privacyEdu: userInfo.privacyEdu,
+        privacySk: userInfo.privacySk,
         setUserInfo:setUserInfo
     }
 
