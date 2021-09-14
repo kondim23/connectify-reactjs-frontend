@@ -2,7 +2,7 @@ import {Button, FormControl, InputGroup} from "react-bootstrap";
 import {useContext, useRef} from "react";
 import UserContext from "../store/user-context";
 
-function NewPost(){
+function NewPost(props){
 
     const connectedUser = useContext(UserContext);
     const postRef = useRef();
@@ -20,7 +20,12 @@ function NewPost(){
                 date : new Date().getUTCDate(),
                 postCreator : connectedUser
             })
-        })
+        }).then(response => {
+            if (response.ok) {
+                props.newPostHandler()
+                postRef.current.value=null;
+            }
+        });
     }
 
     return (

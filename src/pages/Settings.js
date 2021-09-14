@@ -33,7 +33,11 @@ function Settings(){
                 'Content-Type':'application/json'
             },
             body:JSON.stringify(userInfo)
-        }).then(() => connectedUser.setUserInfo(userInfo))
+        }).then(() => {
+            emailRef.current.value=null;
+            passwordRef.current.value=null;
+            connectedUser.setUserInfo(userInfo)
+        })
 
     }
 

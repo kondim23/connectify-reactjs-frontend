@@ -14,7 +14,7 @@ function HomePage(){
     const [isLoading, setIsLoading] = useState(true);
     const [loadedPosts, setLoadedPosts] = useState([]);
 
-    useEffect(() => {
+    function loadPosts() {
         setIsLoading(true);
         fetch("http://localhost:8080/posts?userEmail="+connectedUser.email,{
             headers : {
@@ -28,7 +28,9 @@ function HomePage(){
             setLoadedPosts(data);
             likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));
         });
-    },[]);
+    }
+
+    useEffect(loadPosts,[]);
 
     return (
         <Container >
@@ -38,7 +40,7 @@ function HomePage(){
                 </Col>
                 <Col lg={9}>
                     <Container>
-                        <NewPost/>
+                        <NewPost newPostHandler={loadPosts}/>
                         <section>
                                 {isLoading ? false : <PostList posts={loadedPosts}/>}
                         </section>

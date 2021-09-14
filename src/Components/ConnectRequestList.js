@@ -5,7 +5,8 @@ function ConnectRequestList(props){
 
     return(
         <ListGroup variant={"flush"}>
-            {props.connectRequests.map(connectionRequest => <ConnectRequest connectionRequest={connectionRequest}/>)}
+            {props.connectRequests.map(connectionRequest => <ConnectRequest connectionRequest={connectionRequest}
+                                                                            requestAnsweredHandler={props.requestAnsweredHandler}/>)}
         </ListGroup>
     )
 }

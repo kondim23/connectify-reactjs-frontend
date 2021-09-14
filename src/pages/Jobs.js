@@ -29,7 +29,7 @@ function Jobs(){
         });
     }
 
-    useEffect(() => {
+    function getJobs(){
         setIsLoadingJobs(true);
         fetch("http://localhost:8080/jobs?userEmail="+connectedUser.email,{
             headers : {
@@ -42,8 +42,9 @@ function Jobs(){
             setIsLoadingJobs(false);
             setLoadedJobs(data);
         });
-    },[]);
+    }
 
+    useEffect(getJobs,[]);
 
     return (
 
@@ -58,7 +59,7 @@ function Jobs(){
                     </Accordion.Item>
                 </Accordion>
             </div>
-            <NewJob/>
+            <NewJob newJobHandler={getJobs}/>
             {isLoadingJobs ? false : <JobList jobs={loadedJobs}/>}
         </Container>
     )

@@ -71,7 +71,7 @@ function Post(props){
                                         <Accordion.Body>
                                             <Container>
                                                 {isLoading ? false : <CommentList comments={loadedComments}/>}
-                                                <NewComment post={props.post}/>
+                                                <NewComment post={props.post} newCommentHandler={getCommentsHandler}/>
                                             </Container>
                                         </Accordion.Body>
                                     </Accordion.Item>

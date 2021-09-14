@@ -21,7 +21,9 @@ function ConnectRequest(props){
                     'Content-Type' : 'application/json'
                 }
             }
-        );
+        ).then((response) => {
+            if (response.ok) props.requestAnsweredHandler()
+        });
     }
 
     function rejectConnectionRequest(){
@@ -34,7 +36,9 @@ function ConnectRequest(props){
                     'Content-Type' : 'application/json'
                 }
             }
-        );
+        ).then((response) => {
+            if (response.ok) props.requestAnsweredHandler()
+        });
     }
 
     return(

@@ -44,7 +44,15 @@ function Profile(){
                 'Content-Type':'application/json'
             },
             body:JSON.stringify(userInfo)
-        }).then(() => connectedUser.setUserInfo(userInfo))
+        }).then(() => {
+            nameRef.current.value=null;
+            surnameRef.current.value=null;
+            phoneRef.current.value=null;
+            experienceRef.current.value=null;
+            skillRef.current.value=null;
+            educationRef.current.value=null;
+            connectedUser.setUserInfo(userInfo)
+        })
 
 
     }

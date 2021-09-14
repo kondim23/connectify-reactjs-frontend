@@ -21,6 +21,11 @@ function NewComment(props){
                 postCommented : props.post,
                 userComments : connectedUser
             })
+        }).then((response) => {
+            if (response.ok) {
+                props.newCommentHandler()
+                commentRef.current.value=null;
+            }
         })
     }
 

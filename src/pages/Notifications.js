@@ -13,7 +13,7 @@ function Notifications(){
     const [isLoadingLikeComments, setIsLoadingLikeComments] = useState(true);
     const [likeComment, setLikeComments] = useState([]);
 
-    useEffect(() => {
+    function getConnectionRequests(){
         setIsLoadingConnectRequest(true);
         fetch("http://localhost:8080/connections/pending/"+connectedUser.email,{
             headers : {
@@ -26,7 +26,9 @@ function Notifications(){
             setIsLoadingConnectRequest(false);
             setConnectRequests(data);
         });
+    }
 
+    function getLikeCommentNotifications(){
         setIsLoadingLikeComments(true);
         fetch("http://localhost:8080/notifications/likecomment?userEmail="+connectedUser.email,{
             headers : {
@@ -39,20 +41,30 @@ function Notifications(){
             setIsLoadingLikeComments(false);
             setLikeComments(data);
         });
+    }
+
+    useEffect(() => {
+        getConnectionRequests();
+        getLikeCommentNotifications();
     },[]);
 
     return (
         <Container>
-            <Row style={{overflowY:'scroll',marginBottom: '25px'}}>
+            <Row style={{marginBottom: '25px'}}>
                 <Card style={{height:'25rem'}}>
-                    <Card.Header>Your connection requests:</Card.Header>
-                    {isLoadingConnectRequest ? false : <ConnectRequestList connectRequests={connectRequests}/>}
+                    <Row style={{overflowY:'scroll'}}>
+                        <Card.Header>Your connection requests:</Card.Header>
+                        {isLoadingConnectRequest ? false : <ConnectRequestList connectRequests={connectRequests}
+                                                                               requestAnsweredHandler={getConnectionRequests}/>}
+                    </Row>
                 </Card>
             </Row>
-            <Row style={{overflowY:'scroll'}}>
+            <Row>
                 <Card style={{height:'25rem'}}>
-                    <Card.Header>Your latest notifications::</Card.Header>
-                    {isLoadingLikeComments ? false : <LikeCommentList notifications={likeComment}/>}
+                    <Row style={{overflowY:'scroll'}}>
+                        <Card.Header>Your latest notifications::</Card.Header>
+                        {isLoadingLikeComments ? false : <LikeCommentList notifications={likeComment}/>}
+                    </Row>
                 </Card>
             </Row>
         </Container>
