@@ -1,6 +1,7 @@
-import {Button, Card, Col, Container, Form, InputGroup, ListGroup, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
-import {useContext, useRef, useState} from "react";
+import {Button, Card, Col, Container, Form, InputGroup, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
+import {useContext, useEffect, useRef, useState} from "react";
 import UserContext from "../store/user-context";
+import ImageUploading from 'react-images-uploading';
 
 function Profile(){
 
@@ -16,6 +17,8 @@ function Profile(){
     const [isPrivateEdu, setIsPrivateEdu] = useState(connectedUser.privacyEdu);
     const [isPrivateExp, setIsPrivateExp] = useState(connectedUser.privacyExp);
     const [isPrivateSk, setIsPrivateSk] = useState(connectedUser.privacySk);
+
+    const [profileImage, setProfileImage] = useState(null);
 
     function updateUserInfo(event){
 
@@ -53,23 +56,93 @@ function Profile(){
             educationRef.current.value=null;
             connectedUser.setUserInfo(userInfo)
         })
-
-
     }
+
+    async function setNewImage(image, addUpdateIndex) {
+
+        const formData = new FormData();
+
+        const localFile = await fetch(image[0].data_url);
+        const fileBlob = await localFile.blob();
+
+        formData.append('image',fileBlob)
+
+        fetch("http://localhost:8080/userimage?userEmail=" + connectedUser.email, {
+            headers: {},
+            method: 'POST',
+            body:formData
+        }).then((response) => {
+            if (response.ok) setProfileImage(image)
+        })
+    }
+
+    async function removeProfileImage() {
+
+        const formData = new FormData();
+
+        const localFile = await fetch(null);
+        const fileBlob = await localFile.blob();
+
+        formData.append('image', fileBlob)
+
+        fetch("http://localhost:8080/userimage?userEmail=" + connectedUser.email, {
+            headers: {},
+            method: 'POST',
+            body: formData
+        }).then((response) => {
+            if (response.ok) setProfileImage([])
+        })
+    }
+
+    useEffect(() => {
+        fetch("http://localhost:8080/user/image?userEmail="+connectedUser.email,{
+            headers:{}
+        }).then(response => {
+            return response.blob()
+        }).then(data => {
+            console.log(data, URL.createObjectURL(data))
+            setProfileImage([{data_url:URL.createObjectURL(data)}]);
+        })
+    },[])
 
     return (
         <Container>
             <Row>
                 <Col lg={3}>
                     <Card style={{ width: '18rem' } }>
-                        <Card.Img variant="top" src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg" />
                         <Card.Body>
-                            <Form>
-                                <Form.Group controlId="formFile" className="mb-3">
-                                    <Form.Label>Add a new profile photo:</Form.Label>
-                                    <Form.Control type="file" />
-                                </Form.Group>
-                            </Form>
+                            <ImageUploading value={profileImage} onChange={setNewImage} dataURLKey="data_url" >
+                                {({
+                                      imageList,
+                                      onImageUpdate
+                                }) => (
+                                      <div className={"upload__image-wrapper"}>
+                                          {imageList.map((image,index) => (
+                                              <div key={index} className="image-item">
+                                                  <img src={image['data_url']} alt="" width="100%" />
+                                                  <Row style={{marginTop:'1rem'}}>
+                                                      <Col>
+                                                          <Button variant="outline-secondary"
+                                                                  id="button-addon2"
+                                                                  style={{width:'100%'}}
+                                                                  onClick={() => onImageUpdate(index)}>
+                                                              Update
+                                                          </Button>
+                                                      </Col>
+                                                      <Col>
+                                                          <Button variant="outline-secondary"
+                                                                  id="button-addon2"
+                                                                  style={{width:'100%'}}
+                                                                  onClick={removeProfileImage}>
+                                                              Remove
+                                                          </Button>
+                                                      </Col>
+                                                  </Row>
+                                              </div>
+                                          ))}
+                                      </div>
+                                )}
+                            </ImageUploading>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -124,7 +197,7 @@ function Profile(){
                                         </InputGroup.Text>
                                     </OverlayTrigger>
                                     <Form.Control type="text"
-                                                  placeholder={connectedUser.experience ? connectedUser.experience : "Add your education here"}
+                                                  placeholder={connectedUser.experience ? connectedUser.experience : "Add your experience here"}
                                                   ref={experienceRef}/>
                                     <Button variant="outline-secondary" id="button-addon2" style={{width:'8rem'}}
                                             onClick={() => {isPrivateExp ? setIsPrivateExp(false) : setIsPrivateExp(true)}}>
@@ -145,7 +218,7 @@ function Profile(){
                                         </InputGroup.Text>
                                     </OverlayTrigger>
                                     <Form.Control type="text"
-                                                  placeholder={connectedUser.skill ? connectedUser.skill : "Add your education here"}
+                                                  placeholder={connectedUser.skill ? connectedUser.skill : "Add your skills here"}
                                                   ref={skillRef}/>
                                     <Button variant="outline-secondary" id="button-addon2" style={{width:'8rem'}}
                                             onClick={() => {isPrivateSk ? setIsPrivateSk(false) : setIsPrivateSk(true)}}>

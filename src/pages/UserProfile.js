@@ -90,7 +90,6 @@ function UserProfile(){
             }
         }).then((response) => { return response.text();
         }).then((connectionType) => {
-            console.log(connectionType)
             setIsLoading(false);
             setConnectionStatus(connectionType)
         });
@@ -134,7 +133,7 @@ function UserProfile(){
                                     <Card.Text>{userToVisit.skill}</Card.Text>
                                 </div> : false
                             }
-                            { isLoading ? false : setButton()}
+                            { !isLoading && connectedUser.email!==userToVisit.email? setButton() : false}
                         </Card.Body>
                     </Card>
                 </Col>

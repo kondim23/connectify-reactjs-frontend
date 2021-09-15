@@ -14,7 +14,7 @@ function LikeComment(props){
                 <Card>
                     <Card.Body>
                         {props.notification.userLikes.name + " " + props.notification.userLikes.surname} liked
-                        your post " {props.notification.postLiked.description}".
+                        your post "{props.notification.postLiked.description}".
                     </Card.Body>
                 </Card>
             }

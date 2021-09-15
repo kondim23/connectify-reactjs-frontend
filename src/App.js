@@ -58,7 +58,6 @@ function App(props) {
                   <Settings />
               </Route>
               <Route path='/user' exact>
-                  {console.log(props.user)}
                   <UserProfile user={props.user}/>
               </Route>
           </Switch>
