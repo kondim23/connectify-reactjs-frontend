@@ -95,14 +95,7 @@ function Profile(){
     }
 
     useEffect(() => {
-        fetch("http://localhost:8080/user/image?userEmail="+connectedUser.email,{
-            headers:{}
-        }).then(response => {
-            return response.blob()
-        }).then(data => {
-            console.log(data, URL.createObjectURL(data))
-            setProfileImage([{data_url:URL.createObjectURL(data)}]);
-        })
+        setProfileImage([{data_url:connectedUser.image}])
     },[])
 
     return (

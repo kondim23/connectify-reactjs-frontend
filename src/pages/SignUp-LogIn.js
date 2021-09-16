@@ -47,23 +47,31 @@ function SignUpLogIn() {
                     }
                 }).then((response) => {return response.json();
                 }).then((userInfo) => {
-                    connectedUserContext.setUserInfo({
-                        isLoggedIn: true,
-                        isAdmin: false,
-                        email: givenEmail,
-                        password: givenPassword,
-                        name: userInfo.name,
-                        surname: userInfo.surname,
-                        phone: userInfo.phone,
-                        image: null,
-                        education: userInfo.education,
-                        skill: userInfo.skill,
-                        experience: userInfo.experience,
-                        privacyExp: userInfo.privacyExp,
-                        privacyEdu: userInfo.privacyEdu,
-                        privacySk: userInfo.privacySk
-                    });
-                    return <Redirect to={'/'}/>;
+
+                    fetch("http://localhost:8080/user/image?userEmail="+givenEmail,{
+                        headers:{}
+                    }).then(response => {
+                        return response.blob()
+                    }).then(data => {
+                        // setProfileImage([{data_url:URL.createObjectURL(data)}]);
+                        connectedUserContext.setUserInfo({
+                            isLoggedIn: true,
+                            isAdmin: false,
+                            email: givenEmail,
+                            password: givenPassword,
+                            name: userInfo.name,
+                            surname: userInfo.surname,
+                            phone: userInfo.phone,
+                            image: URL.createObjectURL(data),
+                            education: userInfo.education,
+                            skill: userInfo.skill,
+                            experience: userInfo.experience,
+                            privacyExp: userInfo.privacyExp,
+                            privacyEdu: userInfo.privacyEdu,
+                            privacySk: userInfo.privacySk
+                        });
+                        return <Redirect to={'/'}/>;
+                    })
                 });
             }
         });

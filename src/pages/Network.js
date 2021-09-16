@@ -11,21 +11,36 @@ function Network(){
     const [isLoading, setIsLoading] = useState(true);
     const [usersPreview, setUsersPreview] = useState([]);
 
+    function getImagesOfUsers(users){
+
+        const requests = users.map((user) => {
+            return fetch("http://localhost:8080/user/image?userEmail="+user.email,{
+                headers:{}
+            }).then(response => {
+                return response.blob()
+            }).then((image) => {
+                user.image=URL.createObjectURL(image)
+            })
+        })
+        Promise.allSettled(requests).then(()=>{
+            setUsersPreview(users)
+            setIsLoading(false);
+        })
+    }
+
     function searchSubmit(event){
 
         event.preventDefault();
 
+        setIsLoading(true);
         fetch("http://localhost:8080/search/"+searchDataRef.current.value,{
             headers:{
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
         }).then((response) => {
-
             return response.json();
-        }).then((users) => {
-            setUsersPreview(users);
-        })
+        }).then(getImagesOfUsers)
     }
 
     useEffect(() => {
@@ -37,10 +52,7 @@ function Network(){
             }
         }).then((response) => {
             return  response.json();
-        }).then((data) => {
-            setIsLoading(false);
-            setUsersPreview(data);
-        });
+        }).then(getImagesOfUsers);
     },[]);
 
     return (
