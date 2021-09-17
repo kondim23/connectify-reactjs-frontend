@@ -72,7 +72,10 @@ function Profile(){
             method: 'POST',
             body:formData
         }).then((response) => {
-            if (response.ok) setProfileImage(image)
+            if (response.ok) {
+                setProfileImage(image)
+                connectedUser.setUserImage(image[0].data_url)
+            }
         })
     }
 

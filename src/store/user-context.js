@@ -16,10 +16,32 @@ const UserContext = createContext({
     privacyExp: true,
     privacyEdu: true,
     privacySk: true,
-    setUserInfo:(userData) => {}
+    setUserInfo:(userData) => {},
+    setUserImage:(imageUrl) => {}
 })
 
 export function UserContextProvider(props){
+
+    function setUserImageHandler(imageUrl){
+
+        setUserInfo({
+            isLoggedIn:userInfo.isLoggedIn,
+            isAdmin:userInfo.isAdmin,
+            email:userInfo.email,
+            password:userInfo.password,
+            name:userInfo.name,
+            surname:userInfo.surname,
+            phone:userInfo.phone,
+            image:imageUrl,
+            education:userInfo.education,
+            skill:userInfo.skill,
+            experience:userInfo.experience,
+            privacyExp: userInfo.privacyExp,
+            privacyEdu: userInfo.privacyEdu,
+            privacySk: userInfo.privacySk,
+            setUserInfo:setUserInfo
+        })
+    }
 
     const [userInfo,setUserInfo] = useState({
         isLoggedIn:false,
@@ -53,7 +75,8 @@ export function UserContextProvider(props){
         privacyExp: userInfo.privacyExp,
         privacyEdu: userInfo.privacyEdu,
         privacySk: userInfo.privacySk,
-        setUserInfo:setUserInfo
+        setUserInfo:setUserInfo,
+        setUserImage:setUserImageHandler
     }
 
     return  <UserContext.Provider value={context}>

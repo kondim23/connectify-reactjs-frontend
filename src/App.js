@@ -16,6 +16,9 @@ import SignUpLogIn from "./pages/SignUp-LogIn";
 import UserContext from "./store/user-context";
 import {LikeContextProvider} from "./store/liked-context";
 import UserProfile from "./pages/UserProfile";
+import AdminHome from "./pages/AdminHome";
+import AdminUserProfile from "./pages/AdminUserProfile";
+import AdminNavigationBar from "./Components/layout/AdminNavigationBar";
 
 function App(props) {
 
@@ -27,8 +30,22 @@ function App(props) {
         </div>
     )
 
-
-  return (
+    if (connectedUserInfo.isAdmin) return (
+        <div>
+            <div style={{marginBottom: '25px'}}>
+                <AdminNavigationBar />
+            </div>
+            <Switch>
+                <Route path={'/'} exact>
+                    <AdminHome/>
+                </Route>
+                <Route path={'/admin/user'} exact>
+                    <AdminUserProfile/>
+                </Route>
+            </Switch>
+        </div>
+    )
+    else return (
       <div>
           <div style={{marginBottom: '25px'}}>
             <MainNavigation />
@@ -63,7 +80,7 @@ function App(props) {
           </Switch>
 
       </div>
-  );
+    );
 }
 
 export default App;
