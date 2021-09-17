@@ -45,10 +45,10 @@ function ConnectRequest(props){
         <ListGroupItem>
             <Row>
                 <Col xs={10}>
-                    <text>
-                        {props.connectionRequest.connectSender.name + " " + props.connectionRequest.connectSender.surname} wants to
-                        connect with you!
-                    </text>
+                    <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
+                        {props.connectionRequest.connectSender.name + " " + props.connectionRequest.connectSender.surname} wants
+                        to connect with you!
+                    </ListGroupItem>
                 </Col>
                 <Col xs={1}>
                     <Button style={{width:'6rem'}} variant="outline-primary" id="button-addon2" onClick={acceptConnectionRequest}>Connect</Button>

@@ -2,6 +2,7 @@ import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import UserToVisitContext from "../store/userToVisit-context";
 import UserContext from "../store/user-context";
+import UserConnectionList from "../Components/UserConnectionList";
 
 function UserProfile(){
 
@@ -10,6 +11,7 @@ function UserProfile(){
 
     const [isLoading, setIsLoading] = useState(true);
     const [connectionStatus, setConnectionStatus] = useState(null);
+    const [usersConnected, setUsersConnected] = useState([]);
 
     function sendConnectionRequestHandler(){
 
@@ -90,9 +92,18 @@ function UserProfile(){
             }
         }).then((response) => { return response.text();
         }).then((connectionType) => {
-            setIsLoading(false);
-            setConnectionStatus(connectionType)
-        });
+                fetch("http://localhost:8080/connections/users?userEmail="+userToVisit.email,{
+                    headers : {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }).then((response) => {
+                    return  response.json();
+                }).then((usersConnected)=>{
+                    setUsersConnected(usersConnected)
+                })
+            setConnectionStatus(connectionType);
+            setIsLoading(false);});
     },[]);
 
     return (
@@ -115,27 +126,38 @@ function UserProfile(){
                                     <Card.Text>{userToVisit.phone}</Card.Text>
                                 </div> : false
                             }
-                            {!userToVisit.privacyEdu && userToVisit.education ?
+                            {(connectionStatus==="Connected" || !userToVisit.privacyEdu ||
+                                userToVisit.email===connectedUser.email) && userToVisit.education && !isLoading ?
                                 <div>
                                     <Form.Text>education:</Form.Text>
                                     <Card.Text>{userToVisit.education}</Card.Text>
                                 </div> : false
                             }
-                            {!userToVisit.privacyExp && userToVisit.experience ?
+                            {(connectionStatus==="Connected" || !userToVisit.privacyExp ||
+                                userToVisit.email===connectedUser.email) && userToVisit.experience && !isLoading ?
                                 <div>
                                     <Form.Text>Experience:</Form.Text>
                                     <Card.Text>{userToVisit.experience}</Card.Text>
                                 </div> : false
                             }
-                            {!userToVisit.privacySk && userToVisit.skill ?
+                            {(connectionStatus==="Connected" || !userToVisit.privacySk ||
+                                userToVisit.email===connectedUser.email) && userToVisit.skill && !isLoading ?
                                 <div>
                                     <Form.Text>Skills:</Form.Text>
                                     <Card.Text>{userToVisit.skill}</Card.Text>
                                 </div> : false
                             }
-                            { !isLoading && connectedUser.email!==userToVisit.email? setButton() : false}
+                            { !isLoading && connectedUser.email!==userToVisit.email ? setButton() : false}
                         </Card.Body>
                     </Card>
+                    {!isLoading && connectedUser.email !== userToVisit.email && connectionStatus==="Connected"?
+                        <Card style={{marginTop:'2rem'}}>
+                            <Card.Header>{userToVisit.name} is connected with:</Card.Header>
+                            <Card.Body>
+                                <UserConnectionList userConnected={usersConnected}/>
+                            </Card.Body>
+                        </Card> : false
+                    }
                 </Col>
             </Row>
         </Container>
