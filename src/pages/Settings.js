@@ -16,13 +16,15 @@ function Settings(){
         const userInfo = {
             isAdmin: connectedUser.isAdmin,
             isLoggedIn: connectedUser.isLoggedIn,
+            id:connectedUser.id,
+            image:connectedUser.image,
             email: emailRef.current.value ? emailRef.current.value : connectedUser.email,
             password: passwordRef.current.value ? passwordRef.current.value : connectedUser.password,
             name: connectedUser.name,
             surname: connectedUser.surname,
             phone: connectedUser.phone,
             experience: connectedUser.experience,
-            skill: connectedUser.skill,
+            skills: connectedUser.skills,
             education: connectedUser.education,
         }
 

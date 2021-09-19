@@ -24,6 +24,7 @@ function HomePage(){
         }).then((response) => {
             return  response.json();
         }).then((data) => {
+            console.log(data);
             setIsLoading(false);
             setLoadedPosts(data);
             likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));

@@ -38,10 +38,10 @@ function AdminUserProfile(){
                                     <Card.Text>{userToVisit.experience}</Card.Text>
                                 </div> : false
                             }
-                            {userToVisit.skill ?
+                            {userToVisit.skills ?
                                 <div>
                                     <Form.Text>Skills:</Form.Text>
-                                    <Card.Text>{userToVisit.skill}</Card.Text>
+                                    <Card.Text>{userToVisit.skills}</Card.Text>
                                 </div> : false
                             }
                         </Card.Body>

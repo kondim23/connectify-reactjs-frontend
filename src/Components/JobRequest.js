@@ -12,7 +12,7 @@ function JobRequest(props){
     return (
         <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
             <p>{props.request.applicantUser.name + " " + props.request.applicantUser.surname} has sent a request
-            for job {props.request.jobToApply.description}. </p>
+            for job "{props.request.jobToApply.description}". </p>
         </ListGroupItem>
     )
 }

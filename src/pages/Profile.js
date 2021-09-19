@@ -27,13 +27,15 @@ function Profile(){
         const userInfo = {
             isAdmin: connectedUser.isAdmin,
             isLoggedIn: connectedUser.isLoggedIn,
+            id:connectedUser.id,
             email: connectedUser.email,
             password: connectedUser.password,
+            image:connectedUser.image,
             name: nameRef.current.value ? nameRef.current.value : connectedUser.name,
             surname: surnameRef.current.value ? surnameRef.current.value : connectedUser.surname,
             phone: phoneRef.current.value ? phoneRef.current.value : connectedUser.phone,
             experience: experienceRef.current.value ? experienceRef.current.value : connectedUser.experience,
-            skill: skillRef.current.value ? skillRef.current.value : connectedUser.skill,
+            skills: skillRef.current.value ? skillRef.current.value : connectedUser.skills,
             education: educationRef.current.value ? educationRef.current.value : connectedUser.education,
             privacyEdu: isPrivateEdu,
             privacyExp: isPrivateExp,
@@ -92,9 +94,9 @@ function Profile(){
             headers: {},
             method: 'POST',
             body: formData
-        }).then((response) => {
-            if (response.ok) setProfileImage([])
         })
+        setProfileImage([])
+        connectedUser.setUserImage(null)
     }
 
     useEffect(() => {
@@ -214,7 +216,7 @@ function Profile(){
                                         </InputGroup.Text>
                                     </OverlayTrigger>
                                     <Form.Control type="text"
-                                                  placeholder={connectedUser.skill ? connectedUser.skill : "Add your skills here"}
+                                                  placeholder={connectedUser.skills ? connectedUser.skills : "Add your skills here"}
                                                   ref={skillRef}/>
                                     <Button variant="outline-secondary" id="button-addon2" style={{width:'8rem'}}
                                             onClick={() => {isPrivateSk ? setIsPrivateSk(false) : setIsPrivateSk(true)}}>

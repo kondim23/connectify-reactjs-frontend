@@ -11,6 +11,8 @@ function UserProfile(){
 
     const [isLoading, setIsLoading] = useState(true);
     const [connectionStatus, setConnectionStatus] = useState(null);
+    const [isConnected, setIsConnected] = useState(false);
+    const [isSelf, setIsSelf] = useState(false);
     const [usersConnected, setUsersConnected] = useState([]);
 
     function sendConnectionRequestHandler(){
@@ -35,7 +37,7 @@ function UserProfile(){
 
     function discardConnectionRequestHandler(){
 
-        fetch("http://localhost:8080/connections?userEmail="+connectedUser.email+"&userToDisconnectEmail="+userToVisit.email,{
+        fetch("http://localhost:8080/connections/discard?userId="+connectedUser.id+"&userToDisconnectId="+userToVisit.id,{
             method:'DELETE',
             headers:{
                 'Content-Type': 'application/json',
@@ -44,6 +46,7 @@ function UserProfile(){
         }).then(response => {
             if (response.ok){
                 setConnectionStatus("None");
+                setIsConnected(false);
             }
         })
     }
@@ -85,81 +88,93 @@ function UserProfile(){
 
     useEffect(() => {
         setIsLoading(true);
-        fetch("http://localhost:8080/connections/exist?email2="+connectedUser.email+"&email1="+userToVisit.email,{
+        setIsConnected(false);
+        if (userToVisit.email===connectedUser.email) {
+            setIsSelf(true)
+            setIsLoading(false)
+        }
+        else fetch("http://localhost:8080/connections/exist?email2="+connectedUser.email+"&email1="+userToVisit.email,{
             headers:{
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             }
         }).then((response) => { return response.text();
         }).then((connectionType) => {
-                fetch("http://localhost:8080/connections/users?userEmail="+userToVisit.email,{
-                    headers : {
+            if (connectionType==="Connected") {
+                fetch("http://localhost:8080/connections/users?userEmail=" + userToVisit.email, {
+                    headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     }
                 }).then((response) => {
-                    return  response.json();
-                }).then((usersConnected)=>{
+                    return response.json();
+                }).then((usersConnected) => {
                     setUsersConnected(usersConnected)
+                    setIsConnected(true);
                 })
+            }
+            else setUsersConnected([])
             setConnectionStatus(connectionType);
-            setIsLoading(false);});
-    },[]);
+            setIsLoading(false);
+            setIsConnected(false);
+        });
+    },[userToVisit.email,connectionStatus]);
 
     return (
         <Container>
-            <Row>
-                <Col lg={3}>
-                    <Card style={{ width: '18rem' } }>
-                        <Card.Img src={userToVisit.image} />
-                    </Card>
-                </Col>
-                <Col>
-                    <Card>
-                        <Card.Header>{userToVisit.name+" "+userToVisit.surname}</Card.Header>
-                        <Card.Body>
-                            <Form.Text>Email:</Form.Text>
-                            <Card.Text>{userToVisit.email}</Card.Text>
-                            {userToVisit.phone ?
-                                <div>
-                                    <Form.Text>Phone:</Form.Text>
-                                    <Card.Text>{userToVisit.phone}</Card.Text>
-                                </div> : false
-                            }
-                            {(connectionStatus==="Connected" || !userToVisit.privacyEdu ||
-                                userToVisit.email===connectedUser.email) && userToVisit.education && !isLoading ?
-                                <div>
-                                    <Form.Text>education:</Form.Text>
-                                    <Card.Text>{userToVisit.education}</Card.Text>
-                                </div> : false
-                            }
-                            {(connectionStatus==="Connected" || !userToVisit.privacyExp ||
-                                userToVisit.email===connectedUser.email) && userToVisit.experience && !isLoading ?
-                                <div>
-                                    <Form.Text>Experience:</Form.Text>
-                                    <Card.Text>{userToVisit.experience}</Card.Text>
-                                </div> : false
-                            }
-                            {(connectionStatus==="Connected" || !userToVisit.privacySk ||
-                                userToVisit.email===connectedUser.email) && userToVisit.skill && !isLoading ?
-                                <div>
-                                    <Form.Text>Skills:</Form.Text>
-                                    <Card.Text>{userToVisit.skill}</Card.Text>
-                                </div> : false
-                            }
-                            { !isLoading && connectedUser.email!==userToVisit.email ? setButton() : false}
-                        </Card.Body>
-                    </Card>
-                    {!isLoading && connectedUser.email !== userToVisit.email && connectionStatus==="Connected"?
-                        <Card style={{marginTop:'2rem'}}>
-                            <Card.Header>{userToVisit.name} is connected with:</Card.Header>
-                            <Card.Body>
-                                <UserConnectionList userConnected={usersConnected}/>
-                            </Card.Body>
-                        </Card> : false
-                    }
-                </Col>
-            </Row>
+            {isLoading ? false :
+                <Row>
+                    <Col lg={3}>
+                        <Card style={{ width: '18rem' } }>
+                            <Card.Img src={userToVisit.image} />
+                        </Card>
+                    </Col>
+                    <Col>
+                            <Card>
+                                <Card.Header>{userToVisit.name+" "+userToVisit.surname}</Card.Header>
+                                    <Card.Body>
+                                        <div>
+                                            <Form.Text>Email:</Form.Text>
+                                            <Card.Text>{userToVisit.email}</Card.Text>
+                                        </div>
+                                        {userToVisit.phone ?
+                                            <div>
+                                                <Form.Text>Phone:</Form.Text>
+                                                <Card.Text>{userToVisit.phone}</Card.Text>
+                                            </div> : false
+                                        }
+                                        {userToVisit.education && (isConnected || isSelf || !userToVisit.privacyEdu) ?
+                                            <div>
+                                                <Form.Text>Education:</Form.Text>
+                                                <Card.Text>{userToVisit.education}</Card.Text>
+                                            </div> : false
+                                        }
+                                        {userToVisit.experience && (isConnected || isSelf || !userToVisit.privacyExp) ?
+                                            <div>
+                                                <Form.Text>Experience:</Form.Text>
+                                                <Card.Text>{userToVisit.experience}</Card.Text>
+                                            </div> : false
+                                        }
+                                        {userToVisit.skills && (isConnected || isSelf || !userToVisit.privacySk) ?
+                                            <div>
+                                                <Form.Text>Skills:</Form.Text>
+                                                <Card.Text>{userToVisit.skills}</Card.Text>
+                                            </div> : false
+                                        }
+                                        {isSelf ? false : setButton()}
+                                    </Card.Body>
+                            </Card>
+                        {!isConnected ? false :
+                            <Card style={{marginTop:'2rem'}}>
+                                <Card.Header>{userToVisit.name} is connected with:</Card.Header>
+                                <Card.Body>
+                                    <UserConnectionList userConnected={usersConnected}/>
+                                </Card.Body>
+                            </Card>
+                        }
+                    </Col>
+                </Row>
+            }
         </Container>
     )
 }

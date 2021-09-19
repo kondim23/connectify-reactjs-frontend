@@ -30,7 +30,7 @@ function SignUpLogIn() {
                     phone: null,
                     image:null,
                     education: null,
-                    skill: null,
+                    skills: null,
                     experience: null,
                     privacyExp: true,
                     privacyEdu: true,
@@ -57,6 +57,7 @@ function SignUpLogIn() {
                         connectedUserContext.setUserInfo({
                             isLoggedIn: true,
                             isAdmin: false,
+                            id:userInfo.id,
                             email: givenEmail,
                             password: givenPassword,
                             name: userInfo.name,
@@ -64,7 +65,7 @@ function SignUpLogIn() {
                             phone: userInfo.phone,
                             image: URL.createObjectURL(data),
                             education: userInfo.education,
-                            skill: userInfo.skill,
+                            skills: userInfo.skills,
                             experience: userInfo.experience,
                             privacyExp: userInfo.privacyExp,
                             privacyEdu: userInfo.privacyEdu,
@@ -88,26 +89,24 @@ function SignUpLogIn() {
                 'Accept': 'application/json'
             },
             body:JSON.stringify(signUpData)
-        }).then((response) => {
-
-            if (response.ok) {
+        }).then((response) => { return response.json()
+        }).then((userSaved)=>{
                 connectedUserContext.setUserInfo({
                     isLoggedIn: true,
                     isAdmin: false,
-                    email: signUpData.email,
-                    password: signUpData.password,
-                    name: signUpData.name,
-                    surname: signUpData.surname,
-                    phone: null,
-                    image:null,
-                    education: null,
-                    skill: null,
-                    experience: null,
-                    privacyExp: true,
-                    privacyEdu: true,
-                    privacySk: true
+                    email: userSaved.email,
+                    password: userSaved.password,
+                    name: userSaved.name,
+                    surname: userSaved.surname,
+                    phone: userSaved.phone,
+                    image:userSaved.image,
+                    education: userSaved.education,
+                    skills: userSaved.skills,
+                    experience: userSaved.experience,
+                    privacyExp: userSaved.privacyExp,
+                    privacyEdu: userSaved.privacyEdu,
+                    privacySk: userSaved.privacySk
                 })
-            }
 
             return <Redirect to={'/'}/>;
         })

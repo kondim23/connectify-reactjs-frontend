@@ -13,8 +13,8 @@ function ConnectRequest(props){
 
     function acceptConnectionRequest(){
 
-        fetch('http://localhost:8080/connections/'+connectedUser.email+
-            "?senderEmail="+props.connectionRequest.connectSender.email,{
+        fetch('http://localhost:8080/connections/accept?userId='+connectedUser.id+
+            "&senderId="+props.connectionRequest.connectSender.id,{
                 method:'PUT',
                 headers:{
                     'Accept' : 'application/json',
@@ -28,8 +28,8 @@ function ConnectRequest(props){
 
     function rejectConnectionRequest(){
 
-        fetch('http://localhost:8080/connections?userEmail='+connectedUser.email+
-            "&userToDisconnectEmail="+props.connectionRequest.connectSender.email,{
+        fetch('http://localhost:8080/connections/discard?userId='+connectedUser.id+
+            "&userToDisconnectId="+props.connectionRequest.connectSender.id,{
                 method:'DELETE',
                 headers:{
                     'Accept' : 'application/json',

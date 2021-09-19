@@ -3,12 +3,13 @@ import {createContext, useState} from "react";
 const UserToVisitContext = createContext({
 
     email:null,
+    id:null,
     name:null,
     surname:null,
     phone:null,
     image:null,
     education:null,
-    skill:null,
+    skills:null,
     experience:null,
     privacyExp: true,
     privacyEdu: true,
@@ -31,12 +32,13 @@ export function UserToVisitContextProvider(props){
 
     const [userToVisitInfo,setUserToVisitInfo] = useState({
         email:null,
+        id:null,
         name:null,
         surname:null,
         phone:null,
         image:null,
         education:null,
-        skill:null,
+        skills:null,
         experience:null,
         privacyExp: true,
         privacyEdu: true,
@@ -45,12 +47,13 @@ export function UserToVisitContextProvider(props){
 
     const context={
         email:userToVisitInfo.email,
+        id:userToVisitInfo.id,
         name:userToVisitInfo.name,
         surname:userToVisitInfo.surname,
         phone:userToVisitInfo.phone,
         image:userToVisitInfo.image,
         education:userToVisitInfo.education,
-        skill:userToVisitInfo.skill,
+        skills:userToVisitInfo.skills,
         experience:userToVisitInfo.experience,
         privacyExp: userToVisitInfo.privacyExp,
         privacyEdu: userToVisitInfo.privacyEdu,
