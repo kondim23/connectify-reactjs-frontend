@@ -1,10 +1,10 @@
 import {Col, Container, Row} from "react-bootstrap";
-import HomePageLeftSideBar from "../Components/HomePageLeftSideBar";
-import PostList from "../Components/PostList";
+import HomePageLeftSideBar from "../Components/HomePage/HomePageLeftSideBar";
+import PostList from "../Components/HomePage/PostList";
 import {useContext, useEffect, useState} from "react";
 import LikeContext from "../store/liked-context";
 import UserContext from "../store/user-context";
-import NewPost from "../Components/NewPost";
+import NewPost from "../Components/HomePage/NewPost";
 
 function HomePage(){
 

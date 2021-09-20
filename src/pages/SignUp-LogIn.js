@@ -1,6 +1,6 @@
 import {Card, Col, Container, Row} from "react-bootstrap";
-import LogIn from "../Components/LogIn";
-import SignUp from "../Components/SignUp";
+import LogIn from "../Components/SignUp-Login/LogIn";
+import SignUp from "../Components/SignUp-Login/SignUp";
 import {useContext} from "react";
 import {Redirect} from "react-router-dom";
 import UserContext from "../store/user-context";

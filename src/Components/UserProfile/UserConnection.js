@@ -1,6 +1,6 @@
 import {ListGroupItem} from "react-bootstrap";
 import {useContext} from "react";
-import UserToVisitContext from "../store/userToVisit-context";
+import UserToVisitContext from "../../store/userToVisit-context";
 import {Link} from "react-router-dom";
 
 function UserConnection(props){

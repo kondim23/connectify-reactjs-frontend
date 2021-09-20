@@ -1,6 +1,6 @@
 import {Button, Container, Form, FormControl, InputGroup, Row} from "react-bootstrap";
 import {useContext, useEffect, useRef, useState} from "react";
-import UserList from "../Components/UserList";
+import UserList from "../Components/Network/UserList";
 import UserContext from "../store/user-context";
 
 function Network(){

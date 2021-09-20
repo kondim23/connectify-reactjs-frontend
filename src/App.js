@@ -9,7 +9,7 @@ import Messaging from "./pages/Messaging";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
-import MainNavigation from "./Components/layout/MainNavigation";
+import MainNavigation from "./Components/Layout/MainNavigation";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useContext} from "react";
 import SignUpLogIn from "./pages/SignUp-LogIn";
@@ -18,7 +18,7 @@ import {LikeContextProvider} from "./store/liked-context";
 import UserProfile from "./pages/UserProfile";
 import AdminHome from "./pages/AdminHome";
 import AdminUserProfile from "./pages/AdminUserProfile";
-import AdminNavigationBar from "./Components/layout/AdminNavigationBar";
+import AdminNavigationBar from "./Components/Layout/AdminNavigationBar";
 
 function App(props) {
 

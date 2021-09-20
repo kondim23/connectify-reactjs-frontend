@@ -1,8 +1,8 @@
 import {Card, Container, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import UserContext from "../store/user-context";
-import ConnectRequestList from "../Components/ConnectRequestList";
-import LikeCommentList from "../Components/LikeCommentList";
+import ConnectRequestList from "../Components/Notifications/ConnectRequestList";
+import LikeCommentList from "../Components/Notifications/LikeCommentList";
 
 function Notifications(){
 

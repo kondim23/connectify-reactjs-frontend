@@ -1,6 +1,6 @@
 import {Button, Card, Col, Container, FormText, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import AdminUserList from "../Components/AdminUserList";
+import AdminUserList from "../Components/AdminHome/AdminUserList";
 import exportFromJSON from "export-from-json";
 
 function AdminHome() {

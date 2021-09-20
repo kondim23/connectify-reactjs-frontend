@@ -1,7 +1,7 @@
 import {Card, Col, ListGroup, ListGroupItem} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useContext} from "react";
-import UserToVisitContext from "../store/userToVisit-context";
+import UserToVisitContext from "../../store/userToVisit-context";
 
 function User(props){
 

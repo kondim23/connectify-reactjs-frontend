@@ -1,7 +1,7 @@
 import {Col, ListGroupItem, Row, Button} from "react-bootstrap";
 import {useContext} from "react";
-import UserContext from "../store/user-context";
-import UserToVisitContext from "../store/userToVisit-context";
+import UserContext from "../../store/user-context";
+import UserToVisitContext from "../../store/userToVisit-context";
 import {Link} from "react-router-dom";
 
 function ConnectRequest(props){

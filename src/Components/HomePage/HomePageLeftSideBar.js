@@ -1,7 +1,7 @@
 import {Card, ListGroup} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useContext} from "react";
-import UserContext from "../store/user-context";
+import UserContext from "../../store/user-context";
 
 function HomePageLeftSideBar(){
 

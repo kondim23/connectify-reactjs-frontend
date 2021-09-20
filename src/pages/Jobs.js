@@ -1,9 +1,9 @@
 import {Accordion, Container} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import UserContext from "../store/user-context";
-import JobRequestList from "../Components/JobRequestList";
-import JobList from "../Components/JobList";
-import NewJob from "../Components/NewJob";
+import JobRequestList from "../Components/Jobs/JobRequestList";
+import JobList from "../Components/Jobs/JobList";
+import NewJob from "../Components/Jobs/NewJob";
 
 function Jobs(){
 

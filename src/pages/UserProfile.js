@@ -2,7 +2,7 @@ import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import UserToVisitContext from "../store/userToVisit-context";
 import UserContext from "../store/user-context";
-import UserConnectionList from "../Components/UserConnectionList";
+import UserConnectionList from "../Components/UserProfile/UserConnectionList";
 
 function UserProfile(){
 

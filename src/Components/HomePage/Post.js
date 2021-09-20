@@ -1,10 +1,10 @@
 import {Accordion, Button, Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useContext, useState} from "react";
-import LikeContext from "../store/liked-context";
+import LikeContext from "../../store/liked-context";
 import CommentList from "./CommentList";
 import NewComment from "./NewComment";
-import UserToVisitContext from "../store/userToVisit-context";
+import UserToVisitContext from "../../store/userToVisit-context";
 
 function Post(props){
 

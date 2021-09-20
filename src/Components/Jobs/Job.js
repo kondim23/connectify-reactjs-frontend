@@ -1,8 +1,8 @@
 import {Button, Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
 import {useContext} from "react";
-import UserContext from "../store/user-context";
+import UserContext from "../../store/user-context";
 import {Link} from "react-router-dom";
-import UserToVisitContext from "../store/userToVisit-context";
+import UserToVisitContext from "../../store/userToVisit-context";
 
 function Job(props){
 

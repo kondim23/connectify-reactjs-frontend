@@ -1,6 +1,6 @@
 import {Button, FormControl, InputGroup} from "react-bootstrap";
 import {useContext, useRef} from "react";
-import UserContext from "../store/user-context";
+import UserContext from "../../store/user-context";
 
 function NewComment(props){
 
