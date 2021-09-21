@@ -3,6 +3,7 @@ import {useContext} from "react";
 import UserContext from "../../store/user-context";
 import {Link} from "react-router-dom";
 import UserToVisitContext from "../../store/userToVisit-context";
+import {apiUrl} from "../../baseUrl";
 
 function Job(props){
 
@@ -13,11 +14,12 @@ function Job(props){
 
     function submitRequestHandler(){
 
-        fetch("http://localhost:8080/jobs/requests",{
+        fetch(apiUrl+"/jobs/requests",{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             },
             body:JSON.stringify({
                 date : new Date().getUTCDate(),

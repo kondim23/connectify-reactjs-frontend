@@ -11,7 +11,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import MainNavigation from "./Components/Layout/MainNavigation";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {useContext} from "react";
+import {useContext, useEffect} from "react";
 import SignUpLogIn from "./pages/SignUp-LogIn";
 import UserContext from "./store/user-context";
 import {LikeContextProvider} from "./store/liked-context";
@@ -23,8 +23,13 @@ import AdminNavigationBar from "./Components/Layout/AdminNavigationBar";
 function App(props) {
 
     const connectedUserInfo = useContext(UserContext);
+    const token = JSON.parse(localStorage.getItem('connectedUser'))
 
-    if (!connectedUserInfo.isLoggedIn) return (
+    useEffect(()=>{
+        if (token) connectedUserInfo.setUserInfo(token)
+    },[])
+
+    if (!token || !connectedUserInfo.isLoggedIn) return (
         <div>
             <SignUpLogIn/>
         </div>
@@ -45,7 +50,8 @@ function App(props) {
             </Switch>
         </div>
     )
-    else return (
+
+    return (
       <div>
           <div style={{marginBottom: '25px'}}>
             <MainNavigation />

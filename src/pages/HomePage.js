@@ -5,6 +5,7 @@ import {useContext, useEffect, useState} from "react";
 import LikeContext from "../store/liked-context";
 import UserContext from "../store/user-context";
 import NewPost from "../Components/HomePage/NewPost";
+import {apiUrl} from "../baseUrl";
 
 function HomePage(){
 
@@ -16,15 +17,15 @@ function HomePage(){
 
     function loadPosts() {
         setIsLoading(true);
-        fetch("http://localhost:8080/posts?userEmail="+connectedUser.email,{
+        fetch(apiUrl+"/posts?userEmail="+connectedUser.email,{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => {
             return  response.json();
         }).then((data) => {
-            console.log(data);
             setIsLoading(false);
             setLoadedPosts(data);
             likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));

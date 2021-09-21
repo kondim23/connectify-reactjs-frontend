@@ -2,6 +2,7 @@ import {Button, Card, Col, Container, Form, InputGroup, OverlayTrigger, Row, Too
 import {useContext, useEffect, useRef, useState} from "react";
 import UserContext from "../store/user-context";
 import ImageUploading from 'react-images-uploading';
+import {apiUrl} from "../baseUrl";
 
 function Profile(){
 
@@ -42,11 +43,12 @@ function Profile(){
             privacySk: isPrivateSk
         }
 
-        fetch("http://localhost:8080/user/"+connectedUser.email,{
+        fetch(apiUrl+"/user/"+connectedUser.email,{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             },
             body:JSON.stringify(userInfo)
         }).then(() => {
@@ -69,8 +71,10 @@ function Profile(){
 
         formData.append('image',fileBlob)
 
-        fetch("http://localhost:8080/userimage?userEmail=" + connectedUser.email, {
-            headers: {},
+        fetch(apiUrl+"/userimage?userEmail=" + connectedUser.email, {
+            headers: {
+                'Authorization':connectedUser.token
+            },
             method: 'POST',
             body:formData
         }).then((response) => {
@@ -90,8 +94,10 @@ function Profile(){
 
         formData.append('image', fileBlob)
 
-        fetch("http://localhost:8080/userimage?userEmail=" + connectedUser.email, {
-            headers: {},
+        fetch(apiUrl+"/userimage?userEmail=" + connectedUser.email, {
+            headers: {
+                'Authorization':connectedUser.token
+            },
             method: 'POST',
             body: formData
         })

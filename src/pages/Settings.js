@@ -1,6 +1,7 @@
 import {Button, Card, Container, Form} from "react-bootstrap";
 import {useContext, useRef} from "react";
 import UserContext from "../store/user-context";
+import {apiUrl} from "../baseUrl";
 
 function Settings(){
 
@@ -28,11 +29,12 @@ function Settings(){
             education: connectedUser.education,
         }
 
-        fetch("http://localhost:8080/user/"+connectedUser.email,{
+        fetch(apiUrl+"/user/"+connectedUser.email,{
             method:'PUT',
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             },
             body:JSON.stringify(userInfo)
         }).then(() => {

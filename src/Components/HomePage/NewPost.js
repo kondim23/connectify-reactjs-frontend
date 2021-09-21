@@ -1,6 +1,7 @@
 import {Button, FormControl, InputGroup} from "react-bootstrap";
 import {useContext, useRef} from "react";
 import UserContext from "../../store/user-context";
+import {apiUrl} from "../../baseUrl";
 
 function NewPost(props){
 
@@ -9,11 +10,12 @@ function NewPost(props){
 
     function newPostHandler(){
 
-        fetch("http://localhost:8080/posts",{
+        fetch(apiUrl+"/posts",{
             method:'POST',
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             },
             body:JSON.stringify({
                 description : postRef.current.value,

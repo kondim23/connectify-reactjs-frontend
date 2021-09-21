@@ -1,6 +1,7 @@
 import {Button, Card, Container, Form} from "react-bootstrap";
 import {useContext, useRef} from "react";
 import UserContext from "../../store/user-context";
+import {apiUrl} from "../../baseUrl";
 
 function NewJob(props) {
 
@@ -13,11 +14,12 @@ function NewJob(props) {
 
         event.preventDefault();
 
-        fetch("http://localhost:8080/jobs",{
+        fetch(apiUrl+"/jobs",{
             method:'POST',
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             },
             body:JSON.stringify({
                 title : titleRef.current.value,

@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import UserContext from "../store/user-context";
 import ConnectRequestList from "../Components/Notifications/ConnectRequestList";
 import LikeCommentList from "../Components/Notifications/LikeCommentList";
+import {apiUrl} from "../baseUrl";
 
 function Notifications(){
 
@@ -15,10 +16,11 @@ function Notifications(){
 
     function getConnectionRequests(){
         setIsLoadingConnectRequest(true);
-        fetch("http://localhost:8080/connections/pending/"+connectedUser.email,{
+        fetch(apiUrl+"/connections/pending/"+connectedUser.email,{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => {
             return  response.json();
@@ -30,10 +32,11 @@ function Notifications(){
 
     function getLikeCommentNotifications(){
         setIsLoadingLikeComments(true);
-        fetch("http://localhost:8080/notifications/likecomment?userEmail="+connectedUser.email,{
+        fetch(apiUrl+"/notifications/likecomment?userEmail="+connectedUser.email,{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => {
             return  response.json();

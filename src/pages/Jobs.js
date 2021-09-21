@@ -4,6 +4,7 @@ import UserContext from "../store/user-context";
 import JobRequestList from "../Components/Jobs/JobRequestList";
 import JobList from "../Components/Jobs/JobList";
 import NewJob from "../Components/Jobs/NewJob";
+import {apiUrl} from "../baseUrl";
 
 function Jobs(){
 
@@ -16,10 +17,11 @@ function Jobs(){
     function getRequestsHandler(){
 
         setIsLoadingRequests(true);
-        fetch("http://localhost:8080/jobs/requests?userEmail="+connectedUser.email,{
+        fetch(apiUrl+"/jobs/requests?userEmail="+connectedUser.email,{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => {
             return  response.json();
@@ -31,10 +33,11 @@ function Jobs(){
 
     function getJobs(){
         setIsLoadingJobs(true);
-        fetch("http://localhost:8080/jobs?userEmail="+connectedUser.email,{
+        fetch(apiUrl+"/jobs?userEmail="+connectedUser.email,{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => {
             return  response.json();

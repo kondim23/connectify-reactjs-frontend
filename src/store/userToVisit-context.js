@@ -1,4 +1,6 @@
-import {createContext, useState} from "react";
+import {createContext, useContext, useState} from "react";
+import {apiUrl} from "../baseUrl";
+import UserContext from "./user-context";
 
 const UserToVisitContext = createContext({
 
@@ -19,9 +21,13 @@ const UserToVisitContext = createContext({
 
 export function UserToVisitContextProvider(props){
 
+    const connectedUser = useContext(UserContext);
+
     function setUserToVisit(userToVisitData){
-        return fetch("http://localhost:8080/user/image?userEmail="+userToVisitData.email,{
-            headers:{}
+        return fetch(apiUrl+"/user/image?userEmail="+userToVisitData.email,{
+            headers:{
+                'Authorization':connectedUser.token
+            }
         }).then(response => {
             return response.blob()
         }).then((image) => {

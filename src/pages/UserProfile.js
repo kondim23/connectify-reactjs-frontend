@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import UserToVisitContext from "../store/userToVisit-context";
 import UserContext from "../store/user-context";
 import UserConnectionList from "../Components/UserProfile/UserConnectionList";
+import {apiUrl} from "../baseUrl";
 
 function UserProfile(){
 
@@ -17,11 +18,12 @@ function UserProfile(){
 
     function sendConnectionRequestHandler(){
 
-        fetch("http://localhost:8080/connections",{
+        fetch(apiUrl+"/connections",{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             },
             body:JSON.stringify({
                 connectSender:connectedUser,
@@ -37,11 +39,12 @@ function UserProfile(){
 
     function discardConnectionRequestHandler(){
 
-        fetch("http://localhost:8080/connections/discard?userId="+connectedUser.id+"&userToDisconnectId="+userToVisit.id,{
+        fetch(apiUrl+"/connections/discard?userId="+connectedUser.id+"&userToDisconnectId="+userToVisit.id,{
             method:'DELETE',
             headers:{
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then(response => {
             if (response.ok){
@@ -93,18 +96,20 @@ function UserProfile(){
             setIsSelf(true)
             setIsLoading(false)
         }
-        else fetch("http://localhost:8080/connections/exist?email2="+connectedUser.email+"&email1="+userToVisit.email,{
+        else fetch(apiUrl+"/connections/exist?email2="+connectedUser.email+"&email1="+userToVisit.email,{
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => { return response.text();
         }).then((connectionType) => {
             if (connectionType==="Connected") {
-                fetch("http://localhost:8080/connections/users?userEmail=" + userToVisit.email, {
+                fetch(apiUrl+"/connections/users?userEmail=" + userToVisit.email, {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Authorization':connectedUser.token
                     }
                 }).then((response) => {
                     return response.json();

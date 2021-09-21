@@ -1,9 +1,13 @@
 import {Button, Card, Col, Container, FormText, Row} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import AdminUserList from "../Components/AdminHome/AdminUserList";
 import exportFromJSON from "export-from-json";
+import UserContext from "../store/user-context";
+import {apiUrl} from "../baseUrl";
 
 function AdminHome() {
+
+    const connectedUser = useContext(UserContext)
 
     const [isLoading, setIsLoading] = useState(true);
     const [userList, setUserList] = useState([]);
@@ -19,31 +23,38 @@ function AdminHome() {
 
     function exportJSON(){
 
-        fetch("http://localhost:8080/admin/users",{
+        fetch(apiUrl+"/admin/users",{
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             },
             method:'POST',
             body:JSON.stringify(usersExport)
         }).then((response)=>{
             return response.json()
         }).then((data)=>{
-            const blob = new Blob([JSON.stringify(data)],{type:'application/json'})
-            const link = document.createElement('a')
-            link.href = URL.createObjectURL(blob)
-            link.download = 'export.json'
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // const blob = new Blob([JSON.stringify(data)],{type:'application/json'})
+            // const link = document.createElement('a')
+            // link.href = URL.createObjectURL(blob)
+            // link.download = 'export.json'
+            // document.body.appendChild(link);
+            // link.click();
+            // document.body.removeChild(link);
+            exportFromJSON({
+                data:data,
+                fileName:'export.json',
+                exportType:exportFromJSON.types.json
+            })
         })
     }
 
     function exportXML(){
-        fetch("http://localhost:8080/admin/users",{
+        fetch(apiUrl+"/admin/users",{
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             },
             method:'POST',
             body:JSON.stringify(usersExport)
@@ -60,10 +71,11 @@ function AdminHome() {
 
     useEffect(()  => {
         setIsLoading(true)
-        fetch("http://localhost:8080/users",{
+        fetch(apiUrl+"/users",{
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response)=>{
             return response.json()

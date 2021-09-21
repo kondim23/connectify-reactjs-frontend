@@ -1,5 +1,6 @@
 import {createContext, useContext, useState} from "react";
 import UserContext from "./user-context";
+import {apiUrl} from "../baseUrl";
 
 const LikeContext = createContext({
         likedPosts:[],
@@ -22,10 +23,11 @@ export function LikeContextProvider(props){
 
     function likePostHandler(postData){
 
-        fetch('http://localhost:8080/likes',{
+        fetch(apiUrl+'/likes',{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             },
             method:'POST',
             body: JSON.stringify({
@@ -41,10 +43,11 @@ export function LikeContextProvider(props){
 
     function unlikePostHandler(postData){
 
-        fetch('http://localhost:8080/likes?userEmail='+connectedUser.email+'&postId='+postData.post.id,{
+        fetch(apiUrl+'/likes?userEmail='+connectedUser.email+'&postId='+postData.post.id,{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             },
             method:'DELETE'
         });

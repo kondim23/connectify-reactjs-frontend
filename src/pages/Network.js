@@ -2,6 +2,7 @@ import {Button, Container, Form, FormControl, InputGroup, Row} from "react-boots
 import {useContext, useEffect, useRef, useState} from "react";
 import UserList from "../Components/Network/UserList";
 import UserContext from "../store/user-context";
+import {apiUrl} from "../baseUrl";
 
 function Network(){
 
@@ -14,8 +15,10 @@ function Network(){
     function getImagesOfUsers(users){
 
         const requests = users.map((user) => {
-            return fetch("http://localhost:8080/user/image?userEmail="+user.email,{
-                headers:{}
+            return fetch(apiUrl+"/user/image?userEmail="+user.email,{
+                headers:{
+                    'Authorization':connectedUser.token
+                }
             }).then(response => {
                 return response.blob()
             }).then((image) => {
@@ -33,10 +36,11 @@ function Network(){
         event.preventDefault();
 
         setIsLoading(true);
-        fetch("http://localhost:8080/search/"+searchDataRef.current.value,{
+        fetch(apiUrl+"/search/"+searchDataRef.current.value,{
             headers:{
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => {
             return response.json();
@@ -45,10 +49,11 @@ function Network(){
 
     useEffect(() => {
         setIsLoading(true);
-        fetch("http://localhost:8080/connections/users?userEmail="+connectedUser.email,{
+        fetch(apiUrl+"/connections/users?userEmail="+connectedUser.email,{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => {
             return  response.json();

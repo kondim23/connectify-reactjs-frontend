@@ -1,6 +1,7 @@
 import {Button, FormControl, InputGroup} from "react-bootstrap";
 import {useContext, useRef} from "react";
 import UserContext from "../../store/user-context";
+import {apiUrl} from "../../baseUrl";
 
 function NewComment(props){
 
@@ -9,11 +10,12 @@ function NewComment(props){
 
     function newCommentHandler(){
 
-        fetch("http://localhost:8080/comments",{
+        fetch(apiUrl+"/comments",{
             method:'POST',
             headers:{
                 'Accept':'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization':connectedUser.token
             },
             body:JSON.stringify({
                 comment : commentRef.current.value,

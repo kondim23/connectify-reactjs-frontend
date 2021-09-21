@@ -3,6 +3,7 @@ import {useContext} from "react";
 import UserContext from "../../store/user-context";
 import UserToVisitContext from "../../store/userToVisit-context";
 import {Link} from "react-router-dom";
+import {apiUrl} from "../../baseUrl";
 
 function ConnectRequest(props){
 
@@ -13,12 +14,13 @@ function ConnectRequest(props){
 
     function acceptConnectionRequest(){
 
-        fetch('http://localhost:8080/connections/accept?userId='+connectedUser.id+
+        fetch(apiUrl+'/connections/accept?userId='+connectedUser.id+
             "&senderId="+props.connectionRequest.connectSender.id,{
                 method:'PUT',
                 headers:{
                     'Accept' : 'application/json',
-                    'Content-Type' : 'application/json'
+                    'Content-Type' : 'application/json',
+                    'Authorization':connectedUser.token
                 }
             }
         ).then((response) => {
@@ -28,12 +30,13 @@ function ConnectRequest(props){
 
     function rejectConnectionRequest(){
 
-        fetch('http://localhost:8080/connections/discard?userId='+connectedUser.id+
+        fetch(apiUrl+'/connections/discard?userId='+connectedUser.id+
             "&userToDisconnectId="+props.connectionRequest.connectSender.id,{
                 method:'DELETE',
                 headers:{
                     'Accept' : 'application/json',
-                    'Content-Type' : 'application/json'
+                    'Content-Type' : 'application/json',
+                    'Authorization':connectedUser.token
                 }
             }
         ).then((response) => {

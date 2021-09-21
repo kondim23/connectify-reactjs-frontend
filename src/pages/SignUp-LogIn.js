@@ -4,6 +4,7 @@ import SignUp from "../Components/SignUp-Login/SignUp";
 import {useContext} from "react";
 import {Redirect} from "react-router-dom";
 import UserContext from "../store/user-context";
+import {apiUrl} from "../baseUrl";
 
 function SignUpLogIn() {
 
@@ -11,104 +12,109 @@ function SignUpLogIn() {
 
     function logInHandler(givenEmail, givenPassword){
 
-        fetch("http://localhost:8080/signin?userEmail="+givenEmail+"&userPass="+givenPassword,{
+        fetch(apiUrl+"/login",{
             headers:{
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }).then((response) => {return response.text();
-        }).then((userInfo) =>
-        {
-            if (userInfo==='Admin') {
-                connectedUserContext.setUserInfo({
-                    isLoggedIn: true,
-                    isAdmin: true,
-                    email: givenEmail,
-                    password: givenPassword,
-                    name: null,
-                    surname: null,
-                    phone: null,
-                    image:null,
-                    education: null,
-                    skills: null,
-                    experience: null,
-                    privacyExp: true,
-                    privacyEdu: true,
-                    privacySk: true,
-                });
-                return <Redirect to={'/'}/>;
-            }
-            else if (userInfo==='User'){
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                'email':givenEmail,
+                'password':givenPassword
+            }),
+            method:'POST'
+        }).then((response) => {
+            return response.headers.has('Authorization') ? response.headers.get('Authorization') : null
+        }).then((token)=> {
 
-                fetch("http://localhost:8080/user?userEmail="+givenEmail,{
-                    headers:{
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+            // fetch(apiUrl+"/signin?userEmail=" + givenEmail + "&userPass=" + givenPassword, {
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Accept': 'application/json',
+            //         'Authorization':token
+            //     }
+            // }).then((response) => {
+            //     return response.text();
+            // }).then((userInfo) => {
+                if (givenEmail === 'admin@mail.com') {
+                    const userInfoToSave = {
+                        isLoggedIn: true,
+                        isAdmin: true,
+                        email: givenEmail,
+                        password: givenPassword,
+                        token:token,
+                        name: null,
+                        surname: null,
+                        phone: null,
+                        image: null,
+                        education: null,
+                        skills: null,
+                        experience: null,
+                        privacyExp: true,
+                        privacyEdu: true,
+                        privacySk: true,
                     }
-                }).then((response) => {return response.json();
-                }).then((userInfo) => {
+                    connectedUserContext.setUserInfo(userInfoToSave);
+                    localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
+                    return <Redirect to={'/'}/>;
+                }
+                else {
 
-                    fetch("http://localhost:8080/user/image?userEmail="+givenEmail,{
-                        headers:{}
-                    }).then(response => {
-                        return response.blob()
-                    }).then(data => {
-                        // setProfileImage([{data_url:URL.createObjectURL(data)}]);
-                        connectedUserContext.setUserInfo({
-                            isLoggedIn: true,
-                            isAdmin: false,
-                            id:userInfo.id,
-                            email: givenEmail,
-                            password: givenPassword,
-                            name: userInfo.name,
-                            surname: userInfo.surname,
-                            phone: userInfo.phone,
-                            image: URL.createObjectURL(data),
-                            education: userInfo.education,
-                            skills: userInfo.skills,
-                            experience: userInfo.experience,
-                            privacyExp: userInfo.privacyExp,
-                            privacyEdu: userInfo.privacyEdu,
-                            privacySk: userInfo.privacySk
-                        });
-                        return <Redirect to={'/'}/>;
-                    })
-                });
-            }
-        });
+                    fetch(apiUrl+"/user?userEmail=" + givenEmail, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization':token
+                        }
+                    }).then((response) => {
+                        return response.json();
+                    }).then((userInfo) => {
+
+                        fetch(apiUrl+"/user/image?userEmail=" + givenEmail, {
+                            headers: {
+                                'Authorization':token
+                            }
+                        }).then(response => {
+                            return response.blob()
+                        }).then(data => {
+                            const userInfoToSave ={
+                                isLoggedIn: true,
+                                isAdmin: false,
+                                id: userInfo.id,
+                                email: givenEmail,
+                                password: givenPassword,
+                                token:token,
+                                name: userInfo.name,
+                                surname: userInfo.surname,
+                                phone: userInfo.phone,
+                                image: URL.createObjectURL(data),
+                                education: userInfo.education,
+                                skills: userInfo.skills,
+                                experience: userInfo.experience,
+                                privacyExp: userInfo.privacyExp,
+                                privacyEdu: userInfo.privacyEdu,
+                                privacySk: userInfo.privacySk
+                            }
+                            connectedUserContext.setUserInfo(userInfoToSave);
+                            localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
+                            return <Redirect to={'/'}/>;
+                        })
+                    });
+                }
+            });
     }
 
     function signUpHandler(signUpData){
 
         if (signUpData.password!==signUpData.confirmationPass) return <Redirect to ='/'/>;
 
-        fetch("http://localhost:8080/users",{
+        fetch(apiUrl+"/users/new-user",{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
             body:JSON.stringify(signUpData)
-        }).then((response) => { return response.json()
-        }).then((userSaved)=>{
-                connectedUserContext.setUserInfo({
-                    isLoggedIn: true,
-                    isAdmin: false,
-                    email: userSaved.email,
-                    password: userSaved.password,
-                    name: userSaved.name,
-                    surname: userSaved.surname,
-                    phone: userSaved.phone,
-                    image:userSaved.image,
-                    education: userSaved.education,
-                    skills: userSaved.skills,
-                    experience: userSaved.experience,
-                    privacyExp: userSaved.privacyExp,
-                    privacyEdu: userSaved.privacyEdu,
-                    privacySk: userSaved.privacySk
-                })
-
-            return <Redirect to={'/'}/>;
+        }).then((response) => {
+            if (response.ok) logInHandler(signUpData.email,signUpData.password)
         })
     }
 

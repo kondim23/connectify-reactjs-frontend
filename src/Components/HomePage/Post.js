@@ -5,11 +5,14 @@ import LikeContext from "../../store/liked-context";
 import CommentList from "./CommentList";
 import NewComment from "./NewComment";
 import UserToVisitContext from "../../store/userToVisit-context";
+import {apiUrl} from "../../baseUrl";
+import UserContext from "../../store/user-context";
 
 function Post(props){
 
     const likedPostContext = useContext(LikeContext);
     const userToVisit = useContext(UserToVisitContext);
+    const connectedUser = useContext(UserContext);
     const postIsLiked = likedPostContext.isLiked(props);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -18,10 +21,11 @@ function Post(props){
     function getCommentsHandler(){
 
         setIsLoading(true);
-        fetch("http://localhost:8080/comments?postID="+props.post.id,{
+        fetch(apiUrl+"/comments?postID="+props.post.id,{
             headers : {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization':connectedUser.token
             }
         }).then((response) => {
             return  response.json();
@@ -48,11 +52,23 @@ function Post(props){
                 <Card>
                     <Card.Body>
                         <ListGroup variant="flush">
-                            <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
-                                <Card.Title>
-                                    {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
-                                </Card.Title>
-                            </ListGroupItem>
+                            {props.post.postCreator.email===connectedUser.email ?
+                                <ListGroupItem as={Link} to={'/profile'}>
+                                    <Card.Title>
+                                        {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
+                                    </Card.Title>
+                                </ListGroupItem> :
+                                <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
+                                    <Card.Title>
+                                        {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
+                                    </Card.Title>
+                                </ListGroupItem>
+                            }
+                            {/*<ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>*/}
+                            {/*    <Card.Title>*/}
+                            {/*        {props.post.postCreator.name + ' ' + props.post.postCreator.surname}*/}
+                            {/*    </Card.Title>*/}
+                            {/*</ListGroupItem>*/}
                             {props.post.image ? <ListGroupItem> <Card.Img variant="top" src={props.post.image}/> </ListGroupItem> : null }
                             <ListGroupItem>
                                 <Card.Text>
