@@ -68,9 +68,8 @@ function App(props) {
               <Route path='/jobs' exact>
                   <Jobs />
               </Route>
-              <Route path='/messaging' exact>
-                  <Messaging />
-              </Route>
+              <Route path='/messaging' exact
+                     render={(props) => <Messaging {...props}/>}/>
               <Route path='/notifications' exact>
                   <Notifications />
               </Route>

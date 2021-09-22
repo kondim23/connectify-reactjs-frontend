@@ -4,6 +4,7 @@ import UserToVisitContext from "../store/userToVisit-context";
 import UserContext from "../store/user-context";
 import UserConnectionList from "../Components/UserProfile/UserConnectionList";
 import {apiUrl} from "../baseUrl";
+import {Redirect, useHistory} from "react-router-dom";
 
 function UserProfile(){
 
@@ -15,6 +16,21 @@ function UserProfile(){
     const [isConnected, setIsConnected] = useState(false);
     const [isSelf, setIsSelf] = useState(false);
     const [usersConnected, setUsersConnected] = useState([]);
+
+    const history = useHistory();
+
+    function sendMessageHandler(){
+
+        history.push({
+            pathname: '/messaging',
+            state: { user: {
+                    name:userToVisit.name,
+                    surname:userToVisit.surname,
+                    email:userToVisit.email,
+                    id:userToVisit.id
+                } }
+        })
+    }
 
     function sendConnectionRequestHandler(){
 
@@ -68,13 +84,26 @@ function UserProfile(){
         }
         else if (connectionStatus==="Connected"){
             return (
-                <Button
-                    variant="outline-secondary"
-                    id="button-addon2"
-                    style={{marginTop:'1rem'}}
-                    onClick={discardConnectionRequestHandler}>
-                    Discard Connection
-                </Button>
+                <Row>
+                    <Col lg={3}>
+                        <Button
+                            variant="outline-secondary"
+                            id="button-addon2"
+                            style={{marginTop:'1rem'}}
+                            onClick={discardConnectionRequestHandler}>
+                            Discard Connection
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button
+                            variant="outline-secondary"
+                            id="button-addon2"
+                            style={{marginTop:'1rem'}}
+                            onClick={sendMessageHandler}>
+                            Send Message
+                        </Button>
+                    </Col>
+                </Row>
             )
         }
         else if (connectionStatus==="Pending"){
