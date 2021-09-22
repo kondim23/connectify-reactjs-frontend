@@ -34,72 +34,71 @@ function SignUpLogIn() {
             // }).then((response) => {
             //     return response.text();
             // }).then((userInfo) => {
-                if (givenEmail === 'admin@mail.com') {
-                    const userInfoToSave = {
-                        isLoggedIn: true,
-                        isAdmin: true,
-                        email: givenEmail,
-                        password: givenPassword,
-                        token:token,
-                        name: null,
-                        surname: null,
-                        phone: null,
-                        image: null,
-                        education: null,
-                        skills: null,
-                        experience: null,
-                        privacyExp: true,
-                        privacyEdu: true,
-                        privacySk: true,
-                    }
-                    connectedUserContext.setUserInfo(userInfoToSave);
-                    localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
-                    return <Redirect to={'/'}/>;
+            if (token==null) return <Redirect to={'/'}/>;
+            if (givenEmail === 'admin@mail.com') {
+                const userInfoToSave = {
+                    isLoggedIn: true,
+                    isAdmin: true,
+                    email: givenEmail,
+                    token:token,
+                    name: null,
+                    surname: null,
+                    phone: null,
+                    image: null,
+                    education: null,
+                    skills: null,
+                    experience: null,
+                    privacyExp: true,
+                    privacyEdu: true,
+                    privacySk: true,
                 }
-                else {
+                connectedUserContext.setUserInfo(userInfoToSave);
+                localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
+                return <Redirect to={'/'}/>;
+            }
+            else {
 
-                    fetch(apiUrl+"/user?userEmail=" + givenEmail, {
+                fetch(apiUrl+"/user?userEmail=" + givenEmail, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization':token
+                    }
+                }).then((response) => {
+                    return response.json();
+                }).then((userInfo) => {
+
+                    fetch(apiUrl+"/user/image?userEmail=" + givenEmail, {
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
                             'Authorization':token
                         }
-                    }).then((response) => {
-                        return response.json();
-                    }).then((userInfo) => {
-
-                        fetch(apiUrl+"/user/image?userEmail=" + givenEmail, {
-                            headers: {
-                                'Authorization':token
-                            }
-                        }).then(response => {
-                            return response.blob()
-                        }).then(data => {
-                            const userInfoToSave ={
-                                isLoggedIn: true,
-                                isAdmin: false,
-                                id: userInfo.id,
-                                email: givenEmail,
-                                password: givenPassword,
-                                token:token,
-                                name: userInfo.name,
-                                surname: userInfo.surname,
-                                phone: userInfo.phone,
-                                image: URL.createObjectURL(data),
-                                education: userInfo.education,
-                                skills: userInfo.skills,
-                                experience: userInfo.experience,
-                                privacyExp: userInfo.privacyExp,
-                                privacyEdu: userInfo.privacyEdu,
-                                privacySk: userInfo.privacySk
-                            }
-                            connectedUserContext.setUserInfo(userInfoToSave);
-                            localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
-                            return <Redirect to={'/'}/>;
-                        })
-                    });
-                }
-            });
+                    }).then(response => {
+                        return response.blob()
+                    }).then(data => {
+                        const userInfoToSave ={
+                            isLoggedIn: true,
+                            isAdmin: false,
+                            id: userInfo.id,
+                            email: givenEmail,
+                            token:token,
+                            name: userInfo.name,
+                            surname: userInfo.surname,
+                            phone: userInfo.phone,
+                            image: URL.createObjectURL(data),
+                            education: userInfo.education,
+                            skills: userInfo.skills,
+                            experience: userInfo.experience,
+                            privacyExp: userInfo.privacyExp,
+                            privacyEdu: userInfo.privacyEdu,
+                            privacySk: userInfo.privacySk
+                        }
+                        connectedUserContext.setUserInfo(userInfoToSave);
+                        localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
+                        return <Redirect to={'/'}/>;
+                    })
+                });
+            }
+        });
     }
 
     function signUpHandler(signUpData){

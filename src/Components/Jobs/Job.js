@@ -22,7 +22,7 @@ function Job(props){
                 'Authorization':connectedUser.token
             },
             body:JSON.stringify({
-                date : new Date().getUTCDate(),
+                date : new Date().toISOString(),
                 applicantUser : connectedUser,
                 jobToApply : props.job
             })

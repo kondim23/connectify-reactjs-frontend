@@ -31,7 +31,7 @@ export function LikeContextProvider(props){
             },
             method:'POST',
             body: JSON.stringify({
-                date : new Date().getUTCDate(),
+                date : new Date().toISOString(),
                 userLikes : connectedUser,
                 postLiked : postData.post
             })

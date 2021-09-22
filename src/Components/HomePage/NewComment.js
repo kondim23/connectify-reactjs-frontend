@@ -19,7 +19,7 @@ function NewComment(props){
             },
             body:JSON.stringify({
                 comment : commentRef.current.value,
-                date : new Date().getUTCDate(),
+                date : new Date().toISOString(),
                 postCommented : props.post,
                 userComments : connectedUser
             })

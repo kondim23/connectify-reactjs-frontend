@@ -20,7 +20,8 @@ function Settings(){
             id:connectedUser.id,
             image:connectedUser.image,
             email: emailRef.current.value ? emailRef.current.value : connectedUser.email,
-            password: passwordRef.current.value ? passwordRef.current.value : connectedUser.password,
+            password: passwordRef.current.value ? passwordRef.current.value : null,
+            token: connectedUser.token,
             name: connectedUser.name,
             surname: connectedUser.surname,
             phone: connectedUser.phone,
@@ -40,7 +41,20 @@ function Settings(){
         }).then(() => {
             emailRef.current.value=null;
             passwordRef.current.value=null;
-            connectedUser.setUserInfo(userInfo)
+            connectedUser.setUserInfo({
+                isAdmin: connectedUser.isAdmin,
+                isLoggedIn: connectedUser.isLoggedIn,
+                id:connectedUser.id,
+                image:connectedUser.image,
+                email: emailRef.current.value ? emailRef.current.value : connectedUser.email,
+                token: connectedUser.token,
+                name: connectedUser.name,
+                surname: connectedUser.surname,
+                phone: connectedUser.phone,
+                experience: connectedUser.experience,
+                skills: connectedUser.skills,
+                education: connectedUser.education,
+            })
         })
 
     }

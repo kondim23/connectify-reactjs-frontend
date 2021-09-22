@@ -30,7 +30,7 @@ function Profile(){
             isLoggedIn: connectedUser.isLoggedIn,
             id:connectedUser.id,
             email: connectedUser.email,
-            password: connectedUser.password,
+            token: connectedUser.token,
             image:connectedUser.image,
             name: nameRef.current.value ? nameRef.current.value : connectedUser.name,
             surname: surnameRef.current.value ? surnameRef.current.value : connectedUser.surname,

@@ -19,7 +19,7 @@ function NewPost(props){
             },
             body:JSON.stringify({
                 description : postRef.current.value,
-                date : new Date().getUTCDate(),
+                date : new Date().toISOString(),
                 postCreator : connectedUser
             })
         }).then(response => {
