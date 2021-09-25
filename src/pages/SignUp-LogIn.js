@@ -1,7 +1,7 @@
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Alert, Card, Col, Container, Row} from "react-bootstrap";
 import LogIn from "../Components/SignUp-Login/LogIn";
 import SignUp from "../Components/SignUp-Login/SignUp";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {Redirect} from "react-router-dom";
 import UserContext from "../store/user-context";
 import {apiUrl} from "../baseUrl";
@@ -9,8 +9,12 @@ import {apiUrl} from "../baseUrl";
 function SignUpLogIn() {
 
     const connectedUserContext = useContext(UserContext);
+    const [userDoesNotExistAlert, setUserDoesNotExistAlert] = useState(null);
+    const [userAlreadyExistsAlert, setUserAlreadyExistsAlert] = useState(null);
+    const [passwordConfirmationAlert, setPasswordConfirmationAlert] = useState(null);
 
     function logInHandler(givenEmail, givenPassword){
+
 
         fetch(apiUrl+"/login",{
             headers:{
@@ -25,6 +29,7 @@ function SignUpLogIn() {
             return response.headers.has('Authorization') ? response.headers.get('Authorization') : null
         }).then((token)=> {
 
+
             // fetch(apiUrl+"/signin?userEmail=" + givenEmail + "&userPass=" + givenPassword, {
             //     headers: {
             //         'Content-Type': 'application/json',
@@ -34,7 +39,15 @@ function SignUpLogIn() {
             // }).then((response) => {
             //     return response.text();
             // }).then((userInfo) => {
-            if (token==null) return <Redirect to={'/'}/>;
+            if (token==null) {
+
+                setUserDoesNotExistAlert(
+                    <Alert variant={"danger"}>
+                        Wrong Email or Password provided.
+                    </Alert>
+                );
+                return;
+            }
             if (givenEmail === 'admin@mail.com') {
                 const userInfoToSave = {
                     isLoggedIn: true,
@@ -54,9 +67,10 @@ function SignUpLogIn() {
                 }
                 connectedUserContext.setUserInfo(userInfoToSave);
                 localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
-                return <Redirect to={'/'}/>;
+                // return <Redirect to={'/'}/>;
             }
             else {
+
 
                 fetch(apiUrl+"/user?userEmail=" + givenEmail, {
                     headers: {
@@ -84,7 +98,7 @@ function SignUpLogIn() {
                             name: userInfo.name,
                             surname: userInfo.surname,
                             phone: userInfo.phone,
-                            image: URL.createObjectURL(data),
+                            image: data.size ? URL.createObjectURL(data) : "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png",
                             education: userInfo.education,
                             skills: userInfo.skills,
                             experience: userInfo.experience,
@@ -94,7 +108,8 @@ function SignUpLogIn() {
                         }
                         connectedUserContext.setUserInfo(userInfoToSave);
                         localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
-                        return <Redirect to={'/'}/>;
+                        localStorage.setItem('connectedUserImage', data)
+                        // return <Redirect to={'/'}/>;
                     })
                 });
             }
@@ -103,7 +118,14 @@ function SignUpLogIn() {
 
     function signUpHandler(signUpData){
 
-        if (signUpData.password!==signUpData.confirmationPass) return <Redirect to ='/'/>;
+        if (signUpData.password!==signUpData.confirmationPass) {
+
+            setPasswordConfirmationAlert(
+                <Alert variant={"danger"}>
+                    'Password' and 'Confirm Password' entries are not the same.
+                </Alert>
+            )
+        }
 
         fetch(apiUrl+"/users/new-user",{
             method:'POST',
@@ -114,6 +136,11 @@ function SignUpLogIn() {
             body:JSON.stringify(signUpData)
         }).then((response) => {
             if (response.ok) logInHandler(signUpData.email,signUpData.password)
+            else setUserAlreadyExistsAlert(
+                <Alert variant={"danger"}>
+                    A user with email {signUpData.email} already exists.
+                </Alert>
+            )
         })
     }
 
@@ -124,9 +151,12 @@ function SignUpLogIn() {
                 <Card.Body>
                     <Row>
                         <Col>
+                            {userDoesNotExistAlert ? userDoesNotExistAlert : false}
                             <LogIn onLogin={logInHandler}/>
                         </Col>
                         <Col>
+                            {userAlreadyExistsAlert ? userAlreadyExistsAlert : false}
+                            {passwordConfirmationAlert ? passwordConfirmationAlert : false}
                             <SignUp onSignup={signUpHandler}/>
                         </Col>
                     </Row>

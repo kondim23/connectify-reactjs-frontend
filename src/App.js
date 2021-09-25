@@ -19,6 +19,7 @@ import UserProfile from "./pages/UserProfile";
 import AdminHome from "./pages/AdminHome";
 import AdminUserProfile from "./pages/AdminUserProfile";
 import AdminNavigationBar from "./Components/Layout/AdminNavigationBar";
+import {apiUrl} from "./baseUrl";
 
 function App(props) {
 
@@ -26,10 +27,25 @@ function App(props) {
     const token = JSON.parse(localStorage.getItem('connectedUser'))
 
     useEffect(()=>{
-        if (token) connectedUserInfo.setUserInfo(token)
-    },[])
 
-    if (!token || !connectedUserInfo.isLoggedIn) return (
+        if (token && !connectedUserInfo.isLoggedIn) {
+
+            fetch(apiUrl+"/user/image?userEmail=" + token.email, {
+                headers: {
+                    'Authorization':token.token
+                }
+            }).then(response => {
+                return response.blob()
+            }).then(data => {
+                console.log(1,data)
+                token.image = data.size ? URL.createObjectURL(data) :
+                    "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
+                connectedUserInfo.setUserInfo(token)
+            })
+        }
+    },[connectedUserInfo])
+
+    if (!connectedUserInfo.isLoggedIn) return (
         <div>
             <SignUpLogIn/>
         </div>

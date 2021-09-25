@@ -22,7 +22,8 @@ function Network(){
             }).then(response => {
                 return response.blob()
             }).then((image) => {
-                user.image=URL.createObjectURL(image)
+                console.log(image)
+                user.image=image.size ? URL.createObjectURL(image) : "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
             })
         })
         Promise.allSettled(requests).then(()=>{

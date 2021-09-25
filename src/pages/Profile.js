@@ -87,19 +87,10 @@ function Profile(){
 
     async function removeProfileImage() {
 
-        const formData = new FormData();
-
-        const localFile = await fetch(null);
-        const fileBlob = await localFile.blob();
-
-        formData.append('image', fileBlob)
-
-        fetch(apiUrl+"/userimage?userEmail=" + connectedUser.email, {
+        fetch(apiUrl+"/user/image/remove?userEmail=" + connectedUser.email, {
             headers: {
                 'Authorization':connectedUser.token
-            },
-            method: 'POST',
-            body: formData
+            }
         })
         setProfileImage([])
         connectedUser.setUserImage(null)

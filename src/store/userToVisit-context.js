@@ -31,7 +31,7 @@ export function UserToVisitContextProvider(props){
         }).then(response => {
             return response.blob()
         }).then((image) => {
-            userToVisitData.image=URL.createObjectURL(image)
+            userToVisitData.image = image.size ? URL.createObjectURL(image) : "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
             setUserToVisitInfo(userToVisitData)
         })
     }
