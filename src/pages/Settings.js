@@ -39,8 +39,6 @@ function Settings(){
             },
             body:JSON.stringify(userInfo)
         }).then(() => {
-            emailRef.current.value=null;
-            passwordRef.current.value=null;
             connectedUser.setUserInfo({
                 isAdmin: connectedUser.isAdmin,
                 isLoggedIn: connectedUser.isLoggedIn,
@@ -55,6 +53,8 @@ function Settings(){
                 skills: connectedUser.skills,
                 education: connectedUser.education,
             })
+            emailRef.current.value=null;
+            passwordRef.current.value=null;
         })
 
     }
