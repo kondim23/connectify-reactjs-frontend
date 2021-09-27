@@ -1,22 +1,22 @@
 import {Accordion, Button, Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {useContext, useState} from "react";
 import LikeContext from "../../store/liked-context";
 import CommentList from "./CommentList";
 import NewComment from "./NewComment";
-import UserToVisitContext from "../../store/userToVisit-context";
 import {apiUrl} from "../../baseUrl";
 import UserContext from "../../store/user-context";
 
 function Post(props){
 
     const likedPostContext = useContext(LikeContext);
-    const userToVisit = useContext(UserToVisitContext);
     const connectedUser = useContext(UserContext);
     const postIsLiked = likedPostContext.isLiked(props);
 
     const [isLoading, setIsLoading] = useState(true);
     const [loadedComments, setLoadedComments] = useState([]);
+
+    const history = useHistory()
 
     function getCommentsHandler(){
 
@@ -45,7 +45,24 @@ function Post(props){
         }
     }
 
-    function setUserToVisit(){userToVisit.setUserToVisitInfo(props.post.postCreator)}
+    function visitUser(){
+
+        fetch(apiUrl+"/user/image?userEmail="+props.post.postCreator.email,{
+            headers:{
+                'Authorization':connectedUser.token
+            }
+        }).then(response => {
+            return response.blob()
+        }).then((image) => {
+
+            props.post.postCreator.image = image.size ? URL.createObjectURL(image) :
+                "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
+            history.push({
+                pathname: '/user/'+props.post.postCreator.email,
+                state: { userToVisit: props.post.postCreator }
+            })
+        })
+    }
 
     return (
         <ListGroupItem>
@@ -58,17 +75,12 @@ function Post(props){
                                         {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
                                     </Card.Title>
                                 </ListGroupItem> :
-                                <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
+                                <ListGroupItem onClick={visitUser}>
                                     <Card.Title>
                                         {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
                                     </Card.Title>
                                 </ListGroupItem>
                             }
-                            {/*<ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>*/}
-                            {/*    <Card.Title>*/}
-                            {/*        {props.post.postCreator.name + ' ' + props.post.postCreator.surname}*/}
-                            {/*    </Card.Title>*/}
-                            {/*</ListGroupItem>*/}
                             {props.post.image ? <ListGroupItem> <Card.Img variant="top" src={props.post.image}/> </ListGroupItem> : null }
                             <ListGroupItem>
                                 <Card.Text>

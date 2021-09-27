@@ -39,7 +39,7 @@ function Settings(){
             },
             body:JSON.stringify(userInfo)
         }).then(() => {
-            connectedUser.setUserInfo({
+            const userInfoToSave = {
                 isAdmin: connectedUser.isAdmin,
                 isLoggedIn: connectedUser.isLoggedIn,
                 id:connectedUser.id,
@@ -52,7 +52,9 @@ function Settings(){
                 experience: connectedUser.experience,
                 skills: connectedUser.skills,
                 education: connectedUser.education,
-            })
+            }
+            connectedUser.setUserInfo(userInfoToSave)
+            localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
             emailRef.current.value=null;
             passwordRef.current.value=null;
         })

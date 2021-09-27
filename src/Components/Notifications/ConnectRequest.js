@@ -1,16 +1,32 @@
 import {Col, ListGroupItem, Row, Button} from "react-bootstrap";
 import {useContext} from "react";
 import UserContext from "../../store/user-context";
-import UserToVisitContext from "../../store/userToVisit-context";
-import {Link} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {apiUrl} from "../../baseUrl";
 
 function ConnectRequest(props){
 
     const connectedUser = useContext(UserContext);
-    const userToVisit = useContext(UserToVisitContext);
+    const history = useHistory()
 
-    function setUserToVisit(){userToVisit.setUserToVisitInfo(props.connectionRequest.connectSender)}
+    function visitUser(){
+
+        fetch(apiUrl+"/user/image?userEmail="+props.connectionRequest.connectSender.email,{
+            headers:{
+                'Authorization':connectedUser.token
+            }
+        }).then(response => {
+            return response.blob()
+        }).then((image) => {
+
+            props.connectionRequest.connectSender.image = image.size ? URL.createObjectURL(image) :
+                "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
+            history.push({
+                pathname: '/user/'+props.connectionRequest.connectSender.email,
+                state: { userToVisit: props.connectionRequest.connectSender }
+            })
+        })
+    }
 
     function acceptConnectionRequest(){
 
@@ -48,7 +64,7 @@ function ConnectRequest(props){
         <ListGroupItem>
             <Row>
                 <Col xs={10}>
-                    <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
+                    <ListGroupItem onClick={visitUser}>
                         {props.connectionRequest.connectSender.name + " " + props.connectionRequest.connectSender.surname} wants
                         to connect with you!
                     </ListGroupItem>

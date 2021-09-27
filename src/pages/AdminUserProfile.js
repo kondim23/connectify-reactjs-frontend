@@ -1,10 +1,8 @@
-import {useContext} from "react";
-import UserToVisitContext from "../store/userToVisit-context";
 import {Card, Col, Container, Form, Row} from "react-bootstrap";
 
-function AdminUserProfile(){
+function AdminUserProfile(props){
 
-    const userToVisit = useContext(UserToVisitContext);
+    const userToVisit = props.location.state.userToVisit;
 
     return (
         <Container>

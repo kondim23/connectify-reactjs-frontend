@@ -34,13 +34,6 @@ function AdminHome() {
         }).then((response)=>{
             return response.json()
         }).then((data)=>{
-            // const blob = new Blob([JSON.stringify(data)],{type:'application/json'})
-            // const link = document.createElement('a')
-            // link.href = URL.createObjectURL(blob)
-            // link.download = 'export.json'
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
             exportFromJSON({
                 data:data,
                 fileName:'export.json',

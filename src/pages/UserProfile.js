@@ -1,14 +1,12 @@
 import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
-import UserToVisitContext from "../store/userToVisit-context";
 import UserContext from "../store/user-context";
 import UserConnectionList from "../Components/UserProfile/UserConnectionList";
 import {apiUrl} from "../baseUrl";
-import {Redirect, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
-function UserProfile(){
+function UserProfile(props){
 
-    const userToVisit = useContext(UserToVisitContext);
     const connectedUser = useContext(UserContext);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -16,6 +14,7 @@ function UserProfile(){
     const [isConnected, setIsConnected] = useState(false);
     const [isSelf, setIsSelf] = useState(false);
     const [usersConnected, setUsersConnected] = useState([]);
+    const [userToVisit, setUserToVisit] = useState(props.location.state.userToVisit);
 
     const history = useHistory();
 
@@ -23,12 +22,7 @@ function UserProfile(){
 
         history.push({
             pathname: '/messaging',
-            state: { user: {
-                    name:userToVisit.name,
-                    surname:userToVisit.surname,
-                    email:userToVisit.email,
-                    id:userToVisit.id
-                } }
+            state: { user: userToVisit }
         })
     }
 
@@ -118,41 +112,62 @@ function UserProfile(){
         }
     }
 
+    function getUsersConnectedWithUserToVisit() {
+
+        fetch(apiUrl + "/connections/users?userEmail=" + userToVisit.email, {
+
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': connectedUser.token
+            }
+        }).then((response) => {
+            return response.json();
+
+        }).then((usersConnected) => {
+            setUsersConnected(usersConnected)
+            setIsConnected(true);
+        })
+    }
+
+    function checkConnectionExistence() {
+
+        fetch(apiUrl + "/connections/exist?email2=" + connectedUser.email + "&email1=" + userToVisit.email, {
+
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': connectedUser.token
+            }
+
+        }).then((response) => {
+
+            return response.text();
+
+        }).then((connectionType) => {
+
+            if (connectionType === "Connected")  getUsersConnectedWithUserToVisit();
+            else setUsersConnected([])
+
+            setConnectionStatus(connectionType);
+            setIsLoading(false);
+            setIsConnected(false);
+
+        });
+    }
+
     useEffect(() => {
+
+        setUserToVisit(props.location.state.userToVisit)
         setIsLoading(true);
         setIsConnected(false);
+
         if (userToVisit.email===connectedUser.email) {
             setIsSelf(true)
             setIsLoading(false)
         }
-        else fetch(apiUrl+"/connections/exist?email2="+connectedUser.email+"&email1="+userToVisit.email,{
-            headers:{
-                'Accept':'application/json',
-                'Content-Type':'application/json',
-                'Authorization':connectedUser.token
-            }
-        }).then((response) => { return response.text();
-        }).then((connectionType) => {
-            if (connectionType==="Connected") {
-                fetch(apiUrl+"/connections/users?userEmail=" + userToVisit.email, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'Authorization':connectedUser.token
-                    }
-                }).then((response) => {
-                    return response.json();
-                }).then((usersConnected) => {
-                    setUsersConnected(usersConnected)
-                    setIsConnected(true);
-                })
-            }
-            else setUsersConnected([])
-            setConnectionStatus(connectionType);
-            setIsLoading(false);
-            setIsConnected(false);
-        });
-    },[userToVisit.email,connectionStatus]);
+        else checkConnectionExistence();
+    },[props.location.state.userToVisit]);
 
     return (
         <Container>

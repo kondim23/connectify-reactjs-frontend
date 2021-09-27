@@ -37,7 +37,6 @@ function App(props) {
             }).then(response => {
                 return response.blob()
             }).then(data => {
-                console.log(1,data)
                 token.image = data.size ? URL.createObjectURL(data) :
                     "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
                 connectedUserInfo.setUserInfo(token)
@@ -60,9 +59,7 @@ function App(props) {
                 <Route path={'/'} exact>
                     <AdminHome/>
                 </Route>
-                <Route path={'/admin/user'} exact>
-                    <AdminUserProfile/>
-                </Route>
+                <Route path={'/admin/user/:userToVisit'} exact component={AdminUserProfile}/>
             </Switch>
         </div>
     )
@@ -95,9 +92,7 @@ function App(props) {
               <Route path='/settings' exact>
                   <Settings />
               </Route>
-              <Route path='/user' exact>
-                  <UserProfile user={props.user}/>
-              </Route>
+              <Route path='/user/:userToVisit' exact component={UserProfile}/>
           </Switch>
 
       </div>

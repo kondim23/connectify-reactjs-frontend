@@ -1,22 +1,39 @@
 import {Card, ListGroupItem} from "react-bootstrap";
 import {useContext} from "react";
-import UserToVisitContext from "../../store/userToVisit-context";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import UserContext from "../../store/user-context";
+import {apiUrl} from "../../baseUrl";
 
 function LikeComment(props){
 
-    const userToVisit = useContext(UserToVisitContext)
     const connectedUser = useContext(UserContext);
+    const history = useHistory()
 
-    function setUserToVisit(){
-        props.notification.comment ? userToVisit.setUserToVisitInfo(props.notification.userComments) :
-            userToVisit.setUserToVisitInfo(props.notification.userLikes)
+    function visitUser(){
+
+        const user = props.notification.comment ? props.notification.userComments :
+            props.notification.userLikes
+
+        fetch(apiUrl+"/user/image?userEmail="+user.email,{
+            headers:{
+                'Authorization':connectedUser.token
+            }
+        }).then(response => {
+            return response.blob()
+        }).then((image) => {
+
+            user.image = image.size ? URL.createObjectURL(image) :
+                "https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
+            history.push({
+                pathname: '/user/'+user.email,
+                state: { userToVisit: user }
+            })
+        })
     }
 
     if (props.notification.comment) {
         if (connectedUser.email!==props.notification.userComments.email) return (
-            <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
+            <ListGroupItem onClick={visitUser}>
                     <Card>
                         <Card.Body>
                             {props.notification.userComments.name + " " + props.notification.userComments.surname} commented
@@ -38,7 +55,7 @@ function LikeComment(props){
     }
     else {
         if (connectedUser.email!==props.notification.userLikes.email) return (
-            <ListGroupItem as={Link} to={'/user'} onClick={setUserToVisit}>
+            <ListGroupItem onClick={visitUser}>
                 <Card>
                     <Card.Body>
                         {props.notification.userLikes.name + " " + props.notification.userLikes.surname} liked
