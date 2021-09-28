@@ -15,6 +15,54 @@ function HomePage(){
     const [isLoading, setIsLoading] = useState(true);
     const [loadedPosts, setLoadedPosts] = useState([]);
 
+    function getMediaOfPost(post) {
+        return (mediaList) => {
+            // mediaList.url=URL.createObjectURL(mediaList.media.blob())
+            // console.log(mediaList)
+            const mediaItemRequests = mediaList.map((mediaItem) => {
+
+                return fetch(apiUrl + "/media/download?mediaId=" + mediaItem.id, {
+                    headers: {
+                        'Authorization': connectedUser.token
+                    }
+                }).then((response) => {
+                    return response.blob()
+                }).then((mediaReturned) => {
+                    mediaItem.url = URL.createObjectURL(mediaReturned)
+                })
+            })
+
+            Promise.allSettled(mediaItemRequests).then(() => {
+                post.post.media = mediaList
+            })
+
+            return mediaItemRequests;
+        };
+    }
+
+    function getAllPostMedia() {
+        return (data) => {
+
+            const requests = data.map((post) => {
+
+                return fetch(apiUrl + "/media/type?postId=" + post.post.id, {
+                    headers: {
+                        'Authorization': connectedUser.token
+                    }
+                }).then((response) => {
+                    return response.json()
+                }).then(getMediaOfPost(post));
+            })
+
+            Promise.allSettled(requests).then(() => {
+                console.log(data)
+                setLoadedPosts(data);
+                setIsLoading(false);
+                likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));
+            })
+        };
+    }
+
     function loadPosts() {
         setIsLoading(true);
         fetch(apiUrl+"/posts?userEmail="+connectedUser.email,{
@@ -25,11 +73,7 @@ function HomePage(){
             }
         }).then((response) => {
             return  response.json();
-        }).then((data) => {
-            setIsLoading(false);
-            setLoadedPosts(data);
-            likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));
-        });
+        }).then(getAllPostMedia());
     }
 
     useEffect(loadPosts,[]);

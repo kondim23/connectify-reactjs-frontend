@@ -1,12 +1,25 @@
-import {Button, FormControl, InputGroup} from "react-bootstrap";
-import {useContext, useRef} from "react";
+import {Button, Container, Form, FormControl, InputGroup, ListGroup} from "react-bootstrap";
+import {useContext, useRef, useState} from "react";
 import UserContext from "../../store/user-context";
 import {apiUrl} from "../../baseUrl";
+import ListMedia from "./ListMedia";
 
 function NewPost(props){
 
     const connectedUser = useContext(UserContext);
     const postRef = useRef();
+    const formRef = useRef();
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadedMedia, setLoadedMedia] = useState([]);
+
+    function addNewMedia(event){
+
+        setLoadedMedia(loadedMedia.concat({
+            type: event.target.files[0].type,
+            url: URL.createObjectURL(event.target.files[0])
+        }))
+    }
 
     function newPostHandler(){
 
@@ -23,25 +36,59 @@ function NewPost(props){
                 postCreator : connectedUser
             })
         }).then(response => {
-            if (response.ok) {
+            // if (response.ok) {
+            //     props.newPostHandler()
+            //     postRef.current.value=null;
+            // }
+            return response.json();
+        }).then(post => {
+
+            const requests = loadedMedia.map(async (mediaFile) => {
+
+                const formData = new FormData();
+
+                const localFile = await fetch(mediaFile.url);
+                const fileBlob = await localFile.blob();
+
+                formData.append('media', fileBlob)
+
+                return fetch(apiUrl + "/media/upload?type=" + mediaFile.type + "&postId=" + post.id, {
+                    headers: {
+                        'Authorization':connectedUser.token
+                    },
+                    method:'POST',
+                    body:formData
+                });
+            })
+            Promise.allSettled(requests).then(()=>{
+
                 props.newPostHandler()
                 postRef.current.value=null;
-            }
+                formRef.current.value=null;
+                setLoadedMedia([])
+            })
         });
     }
+    console.log(loadedMedia)
 
     return (
-        <InputGroup className={"mb-3"}>
-            <FormControl
-                placeholder="What are you thinking?"
-                aria-label="What are you thinking?"
-                aria-describedby="basic-addon2"
-                ref={postRef}
-            />
-            <Button variant="outline-secondary" id="button-addon2" onClick={newPostHandler}>
-                Post
-            </Button>
-        </InputGroup>
+        <Container>
+            <InputGroup className={"mb-3"}>
+                <FormControl
+                    placeholder="What are you thinking?"
+                    aria-label="What are you thinking?"
+                    aria-describedby="basic-addon2"
+                    ref={postRef}
+                />
+                <Button variant="outline-secondary" id="button-addon2" onClick={newPostHandler}>
+                    Post
+                </Button>
+            </InputGroup>
+            <section>
+                {isLoading ? false : <ListMedia mediaList={loadedMedia}/>}
+            </section>
+            <input type={"file"} onChange={addNewMedia} ref={formRef}/>
+        </Container>
     )
 }
 

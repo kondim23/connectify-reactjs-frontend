@@ -6,6 +6,7 @@ import CommentList from "./CommentList";
 import NewComment from "./NewComment";
 import {apiUrl} from "../../baseUrl";
 import UserContext from "../../store/user-context";
+import ListMedia from "./ListMedia";
 
 function Post(props){
 
@@ -72,7 +73,7 @@ function Post(props){
                             {props.post.postCreator.email===connectedUser.email ?
                                 <ListGroupItem as={Link} to={'/profile'}>
                                     <Card.Title>
-                                        {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
+                                        {props.post.id+"  "+props.post.postCreator.name + ' ' + props.post.postCreator.surname}
                                     </Card.Title>
                                 </ListGroupItem> :
                                 <ListGroupItem onClick={visitUser}>
@@ -86,6 +87,7 @@ function Post(props){
                                 <Card.Text>
                                     {props.post.description}
                                 </Card.Text>
+                                {props.post.media ? <ListMedia mediaList={props.post.media}/> : false}
                                 <Button
                                     variant="outline-secondary"
                                     id="button-addon2"
