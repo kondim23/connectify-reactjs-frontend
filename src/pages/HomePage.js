@@ -1,4 +1,4 @@
-import {Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Row, Spinner} from "react-bootstrap";
 import HomePageLeftSideBar from "../Components/HomePage/HomePageLeftSideBar";
 import PostList from "../Components/HomePage/PostList";
 import {useContext, useEffect, useState} from "react";
@@ -94,7 +94,11 @@ function HomePage(){
                     <Container>
                         <NewPost newPostHandler={loadPosts}/>
                         <section>
-                                {isLoading ? false : <PostList posts={loadedPosts}/>}
+                                {isLoading ?
+                                    <Spinner animation="border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </Spinner>
+                                    : <PostList posts={loadedPosts}/>}
                         </section>
                     </Container>
                 </Col>

@@ -76,14 +76,22 @@ function Messaging(props) {
                     {isLoadingChatters ?
                         false :
                         loadedChatters.length===0 ?
-                            <p>You have no contacts yet!</p> :
+                            <Card border="secondary" >
+                                <Card.Header  style={{height:'40rem'}} className="text-muted" >
+                                    <p>You have no contacts yet!</p>
+                                </Card.Header>
+                            </Card> :
                             <ChatterList chatters={loadedChatters} handler={chatHandler} /> }
                 </Col>
                 <Col xs={8}>
                     {isLoadingChat ?
                         false :
                         (loadedChatters.length===0) ?
-                            <p>You have no messages yet!</p> :
+                            <Card border="secondary" >
+                                <Card.Footer  style={{height:'40rem'}} className="text-muted" >
+                                    <p>You have no messages yet!</p>
+                                </Card.Footer>
+                            </Card> :
                             <Container>
                                 <ChatList chat={loadedChat} />
                                 <NewMessage chatter={loadedChatter} handler={chatHandler} />
