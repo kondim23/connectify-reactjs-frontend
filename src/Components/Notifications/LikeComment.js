@@ -33,7 +33,7 @@ function LikeComment(props){
 
     if (props.notification.comment) {
         if (connectedUser.email!==props.notification.userComments.email) return (
-            <ListGroupItem onClick={visitUser}>
+            <ListGroupItem onClick={visitUser} id={props.notification}>
                     <Card>
                         <Card.Body>
                             {props.notification.userComments.name + " " + props.notification.userComments.surname} commented

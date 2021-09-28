@@ -6,7 +6,6 @@ import UserContext from "../../store/user-context";
 function HomePageLeftSideBar(){
 
     const connectedUser = useContext(UserContext);
-    console.log(connectedUser)
 
     return (
             <Card style={{ width: '18rem' } }>

@@ -73,7 +73,7 @@ function Post(props){
                             {props.post.postCreator.email===connectedUser.email ?
                                 <ListGroupItem as={Link} to={'/profile'}>
                                     <Card.Title>
-                                        {props.post.id+"  "+props.post.postCreator.name + ' ' + props.post.postCreator.surname}
+                                        {props.post.postCreator.name + ' ' + props.post.postCreator.surname}
                                     </Card.Title>
                                 </ListGroupItem> :
                                 <ListGroupItem onClick={visitUser}>

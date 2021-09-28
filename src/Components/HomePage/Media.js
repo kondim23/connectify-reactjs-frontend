@@ -10,10 +10,10 @@ function Media(props){
                 <Image src={props.media.url} style={{maxHeight:'15rem',maxWidth:'15rem'}}/> : false
             }
             {props.media.type.includes("video") ?
-                <ReactPlayer url={props.media.url} autoPlay controls/> : false
+                <ReactPlayer url={props.media.url} controls/> : false
             }
             {props.media.type.includes("audio") ?
-                <ReactAudioPlayer src={props.media.url} autoPlay controls /> : false
+                <ReactAudioPlayer src={props.media.url} controls /> : false
             }
         </ListGroupItem>
     )

@@ -1,4 +1,4 @@
-import {Button, Container, Form, FormControl, InputGroup, ListGroup} from "react-bootstrap";
+import {Button, Card, Container, Form, FormControl, InputGroup, ListGroup} from "react-bootstrap";
 import {useContext, useRef, useState} from "react";
 import UserContext from "../../store/user-context";
 import {apiUrl} from "../../baseUrl";
@@ -69,26 +69,27 @@ function NewPost(props){
             })
         });
     }
-    console.log(loadedMedia)
 
     return (
-        <Container>
-            <InputGroup className={"mb-3"}>
-                <FormControl
-                    placeholder="What are you thinking?"
-                    aria-label="What are you thinking?"
-                    aria-describedby="basic-addon2"
-                    ref={postRef}
-                />
-                <Button variant="outline-secondary" id="button-addon2" onClick={newPostHandler}>
-                    Post
-                </Button>
-            </InputGroup>
-            <section>
-                {isLoading ? false : <ListMedia mediaList={loadedMedia}/>}
-            </section>
-            <input type={"file"} onChange={addNewMedia} ref={formRef}/>
-        </Container>
+        <Card style={{marginBottom:'2rem'}}>
+            <Card.Body>
+                <InputGroup className={"mb-3"}>
+                    <FormControl
+                        placeholder="What are you thinking?"
+                        aria-label="What are you thinking?"
+                        aria-describedby="basic-addon2"
+                        ref={postRef}
+                    />
+                    <Button variant="outline-secondary" id="button-addon2" onClick={newPostHandler}>
+                        Post
+                    </Button>
+                </InputGroup>
+                <section>
+                    {isLoading ? false : <ListMedia mediaList={loadedMedia}/>}
+                </section>
+                <input type={"file"} onChange={addNewMedia} ref={formRef}/>
+            </Card.Body>
+        </Card>
     )
 }
 

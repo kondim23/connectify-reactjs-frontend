@@ -15,32 +15,41 @@ function HomePage(){
     const [isLoading, setIsLoading] = useState(true);
     const [loadedPosts, setLoadedPosts] = useState([]);
 
-    function getMediaOfPost(post) {
-        return (mediaList) => {
-            // mediaList.url=URL.createObjectURL(mediaList.media.blob())
-            // console.log(mediaList)
-            const mediaItemRequests = mediaList.map((mediaItem) => {
+    function getMediaFileBlob() {
+        return (mediaItem) => {
 
-                return fetch(apiUrl + "/media/download?mediaId=" + mediaItem.id, {
-                    headers: {
-                        'Authorization': connectedUser.token
-                    }
-                }).then((response) => {
-                    return response.blob()
-                }).then((mediaReturned) => {
-                    mediaItem.url = URL.createObjectURL(mediaReturned)
-                })
+            return fetch(apiUrl + "/media/download?mediaId=" + mediaItem.id, {
+                headers: {
+                    'Authorization': connectedUser.token
+                }
+            }).then((response) => {
+                return response.blob()
+            }).then((mediaReturned) => {
+                mediaItem.url = URL.createObjectURL(mediaReturned)
             })
-
-            Promise.allSettled(mediaItemRequests).then(() => {
-                post.post.media = mediaList
-            })
-
-            return mediaItemRequests;
         };
     }
 
-    function getAllPostMedia() {
+    function getMediaOfPost(data) {
+        return () => {
+
+            const mediaItemRequests = data.map((post) => {
+                return post.post.media.map(getMediaFileBlob())
+            })
+
+            let allMediaItemRequests = [];
+            for (const item of mediaItemRequests)
+                allMediaItemRequests = allMediaItemRequests.concat(item)
+
+            Promise.allSettled(allMediaItemRequests).then(() => {
+                setLoadedPosts(data);
+                setIsLoading(false);
+                likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));
+            })
+        };
+    }
+
+    function getAllMedia() {
         return (data) => {
 
             const requests = data.map((post) => {
@@ -51,15 +60,12 @@ function HomePage(){
                     }
                 }).then((response) => {
                     return response.json()
-                }).then(getMediaOfPost(post));
+                }).then((mediaList)=>{
+                    post.post.media=mediaList
+                });
             })
 
-            Promise.allSettled(requests).then(() => {
-                console.log(data)
-                setLoadedPosts(data);
-                setIsLoading(false);
-                likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));
-            })
+            Promise.allSettled(requests).then(getMediaOfPost(data))
         };
     }
 
@@ -73,7 +79,7 @@ function HomePage(){
             }
         }).then((response) => {
             return  response.json();
-        }).then(getAllPostMedia());
+        }).then(getAllMedia());
     }
 
     useEffect(loadPosts,[]);

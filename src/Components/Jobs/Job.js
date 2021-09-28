@@ -48,7 +48,7 @@ function Job(props){
     }
 
     return (
-        <ListGroupItem>
+        <ListGroupItem id={props.job.id}>
             <Container>
                 <Card>
                     <Card.Body>

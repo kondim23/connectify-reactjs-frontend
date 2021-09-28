@@ -25,11 +25,7 @@ function NewMessage(props){
             })
         }).then(response => {
             if (response.ok) {
-                console.log(postRef.current);
-                // refreshHandler();
                 props.handler(props.chatter);
-                console.log(postRef.current);
-                // postRef.current.value = null;
             }
         });
     }
