@@ -1,7 +1,6 @@
 import {Button, Card, Col, Container, Form, InputGroup, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import UserContext from "../store/user-context";
-import ImageUploading from 'react-images-uploading';
 import {apiUrl} from "../baseUrl";
 
 function Profile(){
@@ -14,12 +13,13 @@ function Profile(){
     const experienceRef = useRef();
     const skillRef = useRef();
     const educationRef = useRef();
+    const formRef = useRef();
 
     const [isPrivateEdu, setIsPrivateEdu] = useState(connectedUser.privacyEdu);
     const [isPrivateExp, setIsPrivateExp] = useState(connectedUser.privacyExp);
     const [isPrivateSk, setIsPrivateSk] = useState(connectedUser.privacySk);
 
-    const [profileImage, setProfileImage] = useState(null);
+    const [profileImage, setProfileImage] = useState({data_url:connectedUser.image});
 
     function updateUserInfo(event){
 
@@ -62,11 +62,15 @@ function Profile(){
         })
     }
 
-    async function setNewImage(image, addUpdateIndex) {
+    async function setNewImage(event) {
+
+        if (!event.target.files[0].type.includes("image")) return;
+
+        const image_url = URL.createObjectURL(event.target.files[0]);
 
         const formData = new FormData();
 
-        const localFile = await fetch(image[0].data_url);
+        const localFile = await fetch(image_url);
         const fileBlob = await localFile.blob();
 
         formData.append('image',fileBlob)
@@ -79,8 +83,10 @@ function Profile(){
             body:formData
         }).then((response) => {
             if (response.ok) {
-                setProfileImage(image)
-                connectedUser.setUserImage(image[0].data_url)
+                setProfileImage({
+                    data_url: image_url
+                })
+                connectedUser.setUserImage(image_url)
             }
         })
     }
@@ -92,13 +98,9 @@ function Profile(){
                 'Authorization':connectedUser.token
             }
         })
-        setProfileImage([])
-        connectedUser.setUserImage(null)
+        setProfileImage({data_url:"https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"})
+        connectedUser.setUserImage("https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png")
     }
-
-    useEffect(() => {
-        setProfileImage([{data_url:connectedUser.image}])
-    },[])
 
     return (
         <Container>
@@ -106,38 +108,26 @@ function Profile(){
                 <Col lg={3}>
                     <Card style={{ width: '18rem' } }>
                         <Card.Body>
-                            <ImageUploading value={profileImage} onChange={setNewImage} dataURLKey="data_url" >
-                                {({
-                                      imageList,
-                                      onImageUpdate
-                                }) => (
-                                      <div className={"upload__image-wrapper"}>
-                                          {imageList.map((image,index) => (
-                                              <div key={index} className="image-item">
-                                                  <img src={image['data_url']} alt="" width="100%" />
-                                                  <Row style={{marginTop:'1rem'}}>
-                                                      <Col>
-                                                          <Button variant="outline-secondary"
-                                                                  id="button-addon2"
-                                                                  style={{width:'100%'}}
-                                                                  onClick={() => onImageUpdate(index)}>
-                                                              Update
-                                                          </Button>
-                                                      </Col>
-                                                      <Col>
-                                                          <Button variant="outline-secondary"
-                                                                  id="button-addon2"
-                                                                  style={{width:'100%'}}
-                                                                  onClick={removeProfileImage}>
-                                                              Remove
-                                                          </Button>
-                                                      </Col>
-                                                  </Row>
-                                              </div>
-                                          ))}
-                                      </div>
-                                )}
-                            </ImageUploading>
+                            <div className={"upload__image-wrapper"}>
+                                <div className="image-item">
+                                    <img src={profileImage.data_url} alt="" width="100%" />
+                                    <Row style={{marginTop:'1rem'}}>
+                                        <Col>
+                                            <input type={"file"} onChange={setNewImage} ref={formRef}/>
+                                        </Col>
+                                    </Row>
+                                    <Row style={{marginTop:'1rem'}}>
+                                        <Col>
+                                            <Button variant="outline-secondary"
+                                                    id="button-addon2"
+                                                    style={{width:'100%'}}
+                                                    onClick={removeProfileImage}>
+                                                Remove
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </div>
                         </Card.Body>
                     </Card>
                 </Col>

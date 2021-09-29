@@ -42,8 +42,27 @@ function Jobs(){
         }).then((response) => {
             return  response.json();
         }).then((data) => {
-            setIsLoadingJobs(false);
-            setLoadedJobs(data);
+
+            const requests = data.map((job)=>{
+                return fetch(apiUrl+"/jobs/requests/single?userEmail="+connectedUser.email+"&jobId="+job.id,{
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization':connectedUser.token
+                    }
+                }).then((response)=>{
+                    return response.ok ? response.json() : null
+                }).then((jobRequest)=>{
+
+                    if (jobRequest==null) return;
+                    job.date=jobRequest.date;
+                })
+            })
+
+            Promise.allSettled(requests).then(()=>{
+                setIsLoadingJobs(false);
+                setLoadedJobs(data);
+            })
         });
     }
 

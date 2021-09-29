@@ -1,5 +1,5 @@
-import {Button, Card, Container, ListGroup, ListGroupItem} from "react-bootstrap";
-import {useContext} from "react";
+import {Button, Card, Col, Container, FormText, ListGroup, ListGroupItem, Row} from "react-bootstrap";
+import {useContext, useState} from "react";
 import UserContext from "../../store/user-context";
 import {Link, useHistory} from "react-router-dom";
 import {apiUrl} from "../../baseUrl";
@@ -8,6 +8,7 @@ function Job(props){
 
     const connectedUser = useContext(UserContext);
     const history = useHistory()
+    const [apply, setApply] = useState(false);
 
     function visitUser(){
 
@@ -44,6 +45,8 @@ function Job(props){
                 applicantUser : connectedUser,
                 jobToApply : props.job
             })
+        }).then((response)=>{
+            if (response.ok) setApply(true);
         })
     }
 
@@ -63,7 +66,23 @@ function Job(props){
                                 <div className={"text-muted"}>by {props.job.creatorJob.name + " " + props.job.creatorJob.surname}</div>
                             </ListGroupItem>
                             <ListGroupItem>
-                                <Button variant="outline-secondary" id="button-addon2" onClick={submitRequestHandler}>Apply</Button>
+                                <Row>
+                                    <Col lg={1}>
+                                        <Button variant="outline-secondary" id="button-addon2" onClick={submitRequestHandler}>Apply</Button>
+                                    </Col>
+                                    <Col lg={8}>
+                                        {props.job.date ? apply ?
+                                            <FormText>Applied! {props.job.creatorJob.name + " " + props.job.creatorJob.surname} will be informed!</FormText> :
+                                            <FormText>
+                                                You have already applied on this job on {
+                                                new Date(props.job.date).toLocaleDateString() + ' ' + new Date(props.job.date).toLocaleTimeString()
+                                            }
+                                            </FormText> : apply ?
+                                            <FormText>Applied! {props.job.creatorJob.name + " " + props.job.creatorJob.surname} will be informed!</FormText>
+                                            : false
+                                        }
+                                    </Col>
+                                </Row>
                             </ListGroupItem>
                         </ListGroup>
                     </Card.Body>
