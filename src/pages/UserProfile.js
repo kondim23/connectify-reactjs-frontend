@@ -127,12 +127,13 @@ function UserProfile(props){
         }).then((usersConnected) => {
             setUsersConnected(usersConnected)
             setIsConnected(true);
+            setIsLoading(false);
         })
     }
 
     function checkConnectionExistence() {
 
-        fetch(apiUrl + "/connections/exist?email2=" + connectedUser.email + "&email1=" + userToVisit.email, {
+        fetch(apiUrl + "/connections/exist?email2=" + connectedUser.email + "&email1=" + props.location.state.userToVisit.email, {
 
             headers: {
                 'Accept': 'application/json',
@@ -146,27 +147,30 @@ function UserProfile(props){
 
         }).then((connectionType) => {
 
-            if (connectionType === "Connected")  getUsersConnectedWithUserToVisit();
-            else setUsersConnected([])
+            console.log(connectionType)
 
+            if (connectionType === "Connected")  getUsersConnectedWithUserToVisit();
+            else {
+
+                setUsersConnected([])
+                setIsLoading(false);
+                setIsConnected(false);
+            }
             setConnectionStatus(connectionType);
-            setIsLoading(false);
-            setIsConnected(false);
 
         });
     }
 
     useEffect(() => {
 
-        setUserToVisit(props.location.state.userToVisit)
         setIsLoading(true);
+        setUserToVisit(props.location.state.userToVisit)
         setIsConnected(false);
 
-        if (userToVisit.email===connectedUser.email) {
+        if (props.location.state.userToVisit.email === connectedUser.email) {
             setIsSelf(true)
             setIsLoading(false)
-        }
-        else checkConnectionExistence();
+        } else checkConnectionExistence();
     },[props.location.state.userToVisit]);
 
     return (
