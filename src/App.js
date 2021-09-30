@@ -23,6 +23,7 @@ import {apiUrl} from "./baseUrl";
 
 function App(props) {
 
+    //getting userConnected from global Context and localStorage
     const connectedUserInfo = useContext(UserContext);
     const token = JSON.parse(localStorage.getItem('connectedUser'))
 
@@ -44,12 +45,14 @@ function App(props) {
         }
     },[connectedUserInfo])
 
+    // return login-signup page
     if (!connectedUserInfo.isLoggedIn) return (
         <div>
             <SignUpLogIn/>
         </div>
     )
 
+    // return admin page
     if (connectedUserInfo.isAdmin) return (
         <div>
             <div style={{marginBottom: '25px'}}>
@@ -64,6 +67,7 @@ function App(props) {
         </div>
     )
 
+    // return user page
     return (
       <div>
           <div style={{marginBottom: '25px'}}>

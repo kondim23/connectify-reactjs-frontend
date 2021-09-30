@@ -16,7 +16,7 @@ function User(props){
     return (
         <Col>
             <Card>
-                <Card.Img src={props.userData.image}/* style={{maxHeight:'20rem',width:'fit-content'}}*//>
+                <Card.Img src={props.userData.image}/>
                 <Card.Body className="card-body">
                     <ListGroup>
                         <ListGroupItem onClick={visitUser}>{props.userData.name+" "+props.userData.surname}</ListGroupItem>

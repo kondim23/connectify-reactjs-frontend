@@ -36,10 +36,6 @@ function NewPost(props){
                 postCreator : connectedUser
             })
         }).then(response => {
-            // if (response.ok) {
-            //     props.newPostHandler()
-            //     postRef.current.value=null;
-            // }
             return response.json();
         }).then(post => {
 

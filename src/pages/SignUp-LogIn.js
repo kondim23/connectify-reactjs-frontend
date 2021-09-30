@@ -29,16 +29,6 @@ function SignUpLogIn() {
             return response.headers.has('Authorization') ? response.headers.get('Authorization') : null
         }).then((token)=> {
 
-
-            // fetch(apiUrl+"/signin?userEmail=" + givenEmail + "&userPass=" + givenPassword, {
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'Accept': 'application/json',
-            //         'Authorization':token
-            //     }
-            // }).then((response) => {
-            //     return response.text();
-            // }).then((userInfo) => {
             if (token==null) {
 
                 setUserDoesNotExistAlert(
@@ -67,7 +57,6 @@ function SignUpLogIn() {
                 }
                 connectedUserContext.setUserInfo(userInfoToSave);
                 localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
-                // return <Redirect to={'/'}/>;
             }
             else {
 
@@ -108,8 +97,6 @@ function SignUpLogIn() {
                         }
                         connectedUserContext.setUserInfo(userInfoToSave);
                         localStorage.setItem('connectedUser', JSON.stringify(userInfoToSave))
-                        localStorage.setItem('connectedUserImage', data)
-                        // return <Redirect to={'/'}/>;
                     })
                 });
             }
