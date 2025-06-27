@@ -133,7 +133,7 @@ function SignUpLogIn() {
     return (
         <Container fluid>
             <Card style={{marginTop:'30px'}}>
-                <Card.Header><Card.Title>Welcome to Linked In!</Card.Title></Card.Header>
+                <Card.Header><Card.Title>Welcome to Connectify</Card.Title></Card.Header>
                 <Card.Body>
                     <Row>
                         <Col>

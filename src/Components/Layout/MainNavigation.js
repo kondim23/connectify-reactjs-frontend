@@ -15,7 +15,7 @@ function MainNavigation(){
 
     return  (<Navbar bg="light" expand="lg" sticky={"top"}>
                     <Container>
-                        <Navbar.Brand as={Link} to={"/"}>Linked In</Navbar.Brand>
+                        <Navbar.Brand as={Link} to={"/"}>Connectify</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
