@@ -1,4 +1,4 @@
-import {Button, Container, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Navbar} from "react-bootstrap";
 import {Link, Redirect} from "react-router-dom";
 import {useContext} from "react";
 import UserContext from "../../store/user-context";

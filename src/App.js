@@ -43,7 +43,7 @@ function App(props) {
                 connectedUserInfo.setUserInfo(token)
             })
         }
-    },[connectedUserInfo])
+    },[connectedUserInfo, token])
 
     // return login-signup page
     if (!connectedUserInfo.isLoggedIn) return (

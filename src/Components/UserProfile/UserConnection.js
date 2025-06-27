@@ -1,4 +1,4 @@
-import {Card, ListGroupItem} from "react-bootstrap";
+import {ListGroupItem} from "react-bootstrap";
 import {useContext} from "react";
 import {Link, useHistory} from "react-router-dom";
 import UserContext from "../../store/user-context";

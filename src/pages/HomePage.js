@@ -32,20 +32,21 @@ function HomePage(){
 
     function getMediaOfPost(data) {
         return () => {
-
             const mediaItemRequests = data.map((post) => {
                 return post.post.media.map(getMediaFileBlob())
             })
 
             let allMediaItemRequests = [];
             for (const item of mediaItemRequests)
-                allMediaItemRequests = allMediaItemRequests.concat(item)
+                allMediaItemRequests = allMediaItemRequests.concat(item);
 
             Promise.allSettled(allMediaItemRequests).then(() => {
                 setLoadedPosts(data);
                 setIsLoading(false);
-                likeContext.initializeLikedPosts(data.map(post => post.userLikesThisPost ? post.post : false));
-            })
+                likeContext.initializeLikedPosts(
+                    data.map(post => post.userLikesThisPost ? post.post : false)
+                );
+            });
         };
     }
 

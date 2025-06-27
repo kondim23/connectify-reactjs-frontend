@@ -1,7 +1,7 @@
 import {Button, Card, Col, Container, FormText, ListGroup, ListGroupItem, Row} from "react-bootstrap";
 import {useContext, useState} from "react";
 import UserContext from "../../store/user-context";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {apiUrl} from "../../baseUrl";
 
 function Job(props){
